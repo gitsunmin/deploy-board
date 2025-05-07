@@ -1,5 +1,5 @@
 import DATA_BASE from '@/db/deployment';
-import type { Resolvers } from '@repo/typescript-config/graphql';
+import type { Resolvers } from '@repo/types/schema';
 
 export const Query: Resolvers['Query'] = {
     deployments: () => {

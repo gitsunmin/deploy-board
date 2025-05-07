@@ -39,8 +39,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import type { Deployment } from "@repo/typescript-config/graphql";
+import type { Deployment } from "@repo/types/schema";
 import { graphql, useFragment } from "react-relay";
+
 type Props = {
   data: Deployment;
   fragmentRefs: UpdateDeploymentForm$key;

@@ -1,4 +1,4 @@
-import { DeploymentStatus } from "@repo/typescript-config/graphql";
+import { DeploymentStatus } from "@repo/types/schema";
 
 export const DEPLOYMENT_STATUS = [
   DeploymentStatus.Failed,

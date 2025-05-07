@@ -8,14 +8,14 @@ import { graphql } from "relay-runtime";
 import { useSnapshot } from "valtio/react";
 
 const Query = graphql`
-  query AdminIndexQuery {
+  query adminQuery {
     deployments {
       id
       name
       status
       createdAt
       updatedAt
-      ...UpdateDeploymentForm_data
+      ...UpdateDeploymentForm
     }
   }
 `;

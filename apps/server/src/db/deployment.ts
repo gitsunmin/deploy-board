@@ -1,4 +1,4 @@
-import { DeploymentStatus, type Deployment } from '@repo/typescript-config/graphql';
+import { DeploymentStatus, type Deployment } from '@repo/types/schema';
 import { JSONFilePreset } from 'lowdb/node';
 import type { Low } from 'lowdb';
 

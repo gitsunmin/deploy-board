@@ -1,9 +1,15 @@
+import { join } from 'node:path';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const System = {
-    PORT: 3000,
-    SCHEMA_PATH: 'src/schema.graphql',
-}
+  PORT: 3000,
+  SCHEMA_PATH: join(__dirname, '../../../../packages/graphql/schema.graphql'),
+};
 
 export const Constants = {
-    System,
-
-}
+  System,
+};
