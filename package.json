@@ -1,21 +1,18 @@
 {
   "private": true,
+  "name": "deploy-board",
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "relay": "turbo run relay",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "lint": "bunx biome lint --write .",
+    "relay": "relay-compiler --src ./apps/web/src --schema ./apps/web/src/schema.graphql --artifactDirectory ./apps/web/src/__generated__ --extensions ts,tsx --verbose --eagerESModules",
+    "format": "bunx biome format --write ."
   },
   "devDependencies": {
     "eslint": "^8.57.0",
     "prettier": "^3.2.5",
     "turbo": "^2.5.2"
   },
-  "name": "with-vite-react",
   "packageManager": "bun@1.2.11",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+  "workspaces": ["apps/*", "packages/*"]
 }

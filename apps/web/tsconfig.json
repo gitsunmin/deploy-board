@@ -1,13 +1,18 @@
 {
   "extends": "@repo/typescript-config/base.json",
   "include": ["src"],
-  "exclude": ["node_modules", "dist", "src/routeTree.gen.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/routeTree.gen.ts",
+    "src/__generated__"
+  ],
   "compilerOptions": {
     "baseUrl": ".",
     "jsx": "react-jsx",
     "paths": {
       "@/*": ["src/*"],
-      "@repo/*": ["../../packages/*"],
-    },
+      "@repo/*": ["../../packages/*"]
+    }
   }
 }
