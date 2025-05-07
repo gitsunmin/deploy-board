@@ -1,0 +1,30 @@
+interface Node {
+  id: ID!
+}
+
+type Deployment implements Node {
+  id: ID!
+  name: String!
+  description: String
+  status: DeploymentStatus!
+  deployer: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
+enum DeploymentStatus {
+  PENDING
+  IN_PROGRESS
+  SUCCESS
+  FAILED
+}
+
+type Query {
+  deployments: [Deployment!]!
+}
+
+type Mutation {
+  createDeployment(name: String!, description: String): Deployment!
+  updateDeployment(id: ID!, name: String, description: String): Deployment!
+  deleteDeployment(id: ID!): Boolean!
+}

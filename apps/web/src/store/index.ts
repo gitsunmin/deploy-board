@@ -1,5 +1,5 @@
-import type { Deployment } from '@/lib/database';
 import { proxy } from 'valtio';
+import type { Deployment } from '@repo/typescript-config/graphql';
 
 export type RootStore = {
   deployments: Deployment[];

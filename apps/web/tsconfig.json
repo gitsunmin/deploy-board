@@ -1,5 +1,5 @@
 {
-  "extends": "@repo/typescript-config/vite.json",
+  "extends": "@repo/typescript-config/base.json",
   "include": ["src"],
   "exclude": ["node_modules", "dist", "src/routeTree.gen.ts"],
   "compilerOptions": {
@@ -7,6 +7,7 @@
     "jsx": "react-jsx",
     "paths": {
       "@/*": ["src/*"],
+      "@repo/*": ["../../packages/*"],
     },
   }
 }
