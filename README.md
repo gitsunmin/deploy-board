@@ -5,6 +5,7 @@ Project to show the progress of deployment when multiple services are deployed s
 ## Usage
 
 ### Development
+
 ```shell
 # Install dependencies
 bun install

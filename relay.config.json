@@ -1,6 +1,0 @@
-{
-  "src": "./apps/web/src",
-  "schema": "./apps/web/src/schema.graphql",
-  "artifactDirectory": "./packages/types/__generated__",
-  "language": "typescript"
-}

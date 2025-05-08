@@ -14,10 +14,6 @@
       ]
     },
     "lint": {},
-    "relay": {
-      "cache": false,
-      "persistent": true
-    },
     "gen:schema-type": {
       "cache": false,
       "persistent": true

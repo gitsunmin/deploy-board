@@ -40,27 +40,12 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import type { Deployment } from "@repo/types/schema";
-import { graphql, useFragment } from "react-relay";
 
 type Props = {
   data: Deployment;
-  fragmentRefs: UpdateDeploymentForm$key;
 };
 
-export const UpdateDeploymentForm = ({ data, fragmentRefs }: Props) => {
-  const fragments = useFragment(
-    graphql`
-      fragment UpdateDeploymentForm on Deployment {
-        id
-        name
-        description
-        deployer
-        status
-      }
-    `,
-    fragmentRefs
-  );
-  console.log("fragments", fragments);
+export const UpdateDeploymentForm = ({ data }: Props) => {
   const form = useForm<z.infer<typeof updateDeploymentFormSchema>>({
     resolver: zodResolver(updateDeploymentFormSchema),
     defaultValues: {

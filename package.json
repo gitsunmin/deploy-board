@@ -5,15 +5,13 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "bunx biome lint --write .",
-    "relay": "relay-compiler ./relay.config.js",
     "gen:schema-type": "turbo run gen:schema-type",
     "format": "bunx biome format --write ."
   },
   "devDependencies": {
     "eslint": "^8.57.0",
     "prettier": "^3.2.5",
-    "turbo": "^2.5.2",
-    "relay-compiler": "^19.0.0"
+    "turbo": "^2.5.2"
   },
   "packageManager": "bun@1.2.11",
   "workspaces": ["apps/*", "packages/*"]

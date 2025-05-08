@@ -5,8 +5,6 @@ import "./style.css";
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
-import { RelayEnvironmentProvider } from "react-relay";
-import { environment } from "@/relay-environment";
 
 // Create a new router instance
 const router = createRouter({ routeTree });
@@ -25,9 +23,7 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <RelayEnvironmentProvider environment={environment}>
-        <RouterProvider router={router} />
-      </RelayEnvironmentProvider>
+      <RouterProvider router={router} />
     </StrictMode>
   );
 }

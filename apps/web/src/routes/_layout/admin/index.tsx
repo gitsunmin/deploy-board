@@ -3,29 +3,14 @@ import { AddDeploymentForm } from "@/components/AddDeploymentForm";
 import { UpdateDeploymentForm } from "@/components/UpdateDeploymentForm";
 import { setDeployments, store } from "@/store";
 import { createFileRoute, useLayoutEffect } from "@tanstack/react-router";
-import { useLazyLoadQuery } from "react-relay";
-import { graphql } from "relay-runtime";
 import { useSnapshot } from "valtio/react";
 
-const Query = graphql`
-  query adminQuery {
-    deployments {
-      id
-      name
-      status
-      createdAt
-      updatedAt
-      ...UpdateDeploymentForm
-    }
-  }
-`;
 
 export const Route = createFileRoute("/_layout/admin/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const fragment = useLazyLoadQuery(Query, {});
   const deploymentList = useSnapshot(store).deployments;
 
   useLayoutEffect(() => {
@@ -37,7 +22,7 @@ function RouteComponent() {
       <ul className="space-y-4">
         {deploymentList.map((dep) => (
           <li key={dep.id} className="py-2">
-            <UpdateDeploymentForm data={dep} fragmentRefs={undefined} />
+            <UpdateDeploymentForm data={dep} />
           </li>
         ))}
       </ul>
