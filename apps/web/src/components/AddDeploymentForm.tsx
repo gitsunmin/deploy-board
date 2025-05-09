@@ -17,10 +17,24 @@ import { PlusIcon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { gql, useMutation } from "@apollo/client";
+
+const CREATE_DEPLOYMENT = gql`
+  mutation CreateDeployment($input: DeploymentInput!) {
+    createDeployment(input: $input) {
+      id
+      name
+      description
+      deployer
+    }
+  }
+`;
 
 export const AddDeploymentForm = () => {
   const [creating, setCreating] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const [createDeploymentMutation, { data, loading, error }] =
+    useMutation(CREATE_DEPLOYMENT);
 
   const form = useForm<z.infer<typeof addDeploymentFormSchema>>({
     resolver: zodResolver(addDeploymentFormSchema),
@@ -28,6 +42,7 @@ export const AddDeploymentForm = () => {
       name: "",
       description: "",
       deployer: "",
+      status: "PENDING",
     },
   });
 
@@ -46,6 +61,22 @@ export const AddDeploymentForm = () => {
 
   const onSubmit = (data: z.infer<typeof addDeploymentFormSchema>) => {
     setCreating(false);
+    createDeploymentMutation({
+      variables: {
+        input: {
+          name: data.name,
+          description: data.description,
+          deployer: data.deployer,
+          status: data.status,
+        },
+      },
+    })
+      .then((res) => {
+        console.log("Deployment created", res);
+      })
+      .catch((err) => {
+        console.error("Error creating deployment", err);
+      });
   };
 
   return (

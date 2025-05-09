@@ -27,6 +27,13 @@ export type Deployment = Node & {
   readonly updatedAt: Scalars['String']['output'];
 };
 
+export type DeploymentInput = {
+  readonly deployer: Scalars['String']['input'];
+  readonly description: Scalars['String']['input'];
+  readonly name: Scalars['String']['input'];
+  readonly status: DeploymentStatus;
+};
+
 export enum DeploymentStatus {
   Failed = 'FAILED',
   InProgress = 'IN_PROGRESS',
@@ -43,8 +50,7 @@ export type Mutation = {
 
 
 export type MutationCreateDeploymentArgs = {
-  description?: InputMaybe<Scalars['String']['input']>;
-  name: Scalars['String']['input'];
+  input: DeploymentInput;
 };
 
 
@@ -54,9 +60,8 @@ export type MutationDeleteDeploymentArgs = {
 
 
 export type MutationUpdateDeploymentArgs = {
-  description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
-  name?: InputMaybe<Scalars['String']['input']>;
+  input: DeploymentInput;
 };
 
 export type Node = {
@@ -152,6 +157,7 @@ export type ResolversInterfaceTypes<_RefType extends Record<string, unknown>> = 
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Deployment: ResolverTypeWrapper<Deployment>;
+  DeploymentInput: DeploymentInput;
   DeploymentStatus: DeploymentStatus;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -165,6 +171,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   Deployment: Deployment;
+  DeploymentInput: DeploymentInput;
   ID: Scalars['ID']['output'];
   Mutation: {};
   Node: ResolversInterfaceTypes<ResolversParentTypes>['Node'];
@@ -185,9 +192,9 @@ export type DeploymentResolvers<ContextType = any, ParentType extends ResolversP
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  createDeployment?: Resolver<ResolversTypes['Deployment'], ParentType, ContextType, RequireFields<MutationCreateDeploymentArgs, 'name'>>;
+  createDeployment?: Resolver<ResolversTypes['Deployment'], ParentType, ContextType, RequireFields<MutationCreateDeploymentArgs, 'input'>>;
   deleteDeployment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteDeploymentArgs, 'id'>>;
-  updateDeployment?: Resolver<ResolversTypes['Deployment'], ParentType, ContextType, RequireFields<MutationUpdateDeploymentArgs, 'id'>>;
+  updateDeployment?: Resolver<ResolversTypes['Deployment'], ParentType, ContextType, RequireFields<MutationUpdateDeploymentArgs, 'id' | 'input'>>;
 };
 
 export type NodeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']> = {

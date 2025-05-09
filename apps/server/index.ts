@@ -8,6 +8,12 @@ const yoga = createYoga({
     resolvers,
   }),
   healthCheckEndpoint: '/health',
+  logging: {
+    info: (msg) => console.info(msg),
+    error: (msg) => console.error(msg),
+    warn: (msg) => console.warn(msg),
+    debug: (msg) => console.debug(msg),
+  },
 });
 
 const server = Bun.serve({

@@ -27,6 +27,13 @@ export type Deployment = Node & {
   updatedAt: Scalars['String']['output'];
 };
 
+export type DeploymentInput = {
+  deployer: Scalars['String']['input'];
+  description: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  status: DeploymentStatus;
+};
+
 export enum DeploymentStatus {
   Failed = 'FAILED',
   InProgress = 'IN_PROGRESS',
@@ -43,8 +50,7 @@ export type Mutation = {
 
 
 export type MutationCreateDeploymentArgs = {
-  description?: InputMaybe<Scalars['String']['input']>;
-  name: Scalars['String']['input'];
+  input: DeploymentInput;
 };
 
 
@@ -54,9 +60,8 @@ export type MutationDeleteDeploymentArgs = {
 
 
 export type MutationUpdateDeploymentArgs = {
-  description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
-  name?: InputMaybe<Scalars['String']['input']>;
+  input: DeploymentInput;
 };
 
 export type Node = {
@@ -75,6 +80,13 @@ export type Subscription = {
   deploymentUpdated: Deployment;
 };
 
+export type CreateDeploymentMutationVariables = Exact<{
+  input: DeploymentInput;
+}>;
+
+
+export type CreateDeploymentMutation = { __typename?: 'Mutation', createDeployment: { __typename?: 'Deployment', id: string, name: string, description?: string | null, deployer: string } };
+
 export type AdminQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -86,5 +98,6 @@ export type IndexQueryQueryVariables = Exact<{ [key: string]: never; }>;
 export type IndexQueryQuery = { __typename?: 'Query', deployments: Array<{ __typename?: 'Deployment', id: string, name: string, status: DeploymentStatus, deployer: string, description?: string | null, createdAt: string, updatedAt: string }> };
 
 
+export const CreateDeploymentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateDeployment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"DeploymentInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createDeployment"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"deployer"}}]}}]}}]} as unknown as DocumentNode<CreateDeploymentMutation, CreateDeploymentMutationVariables>;
 export const AdminQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AdminQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deployments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"deployer"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<AdminQueryQuery, AdminQueryQueryVariables>;
 export const IndexQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"IndexQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deployments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"deployer"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<IndexQueryQuery, IndexQueryQueryVariables>;

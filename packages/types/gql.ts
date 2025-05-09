@@ -14,10 +14,12 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
+    "\n  mutation CreateDeployment($input: DeploymentInput!) {\n    createDeployment(input: $input) {\n      id\n      name\n      description\n      deployer\n    }\n  }\n": typeof types.CreateDeploymentDocument,
     "\n  query AdminQuery {\n    deployments {\n      id\n      name\n      status\n      deployer\n      description\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.AdminQueryDocument,
     "\n  query IndexQuery {\n    deployments {\n      id\n      name\n      status\n      deployer\n      description\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.IndexQueryDocument,
 };
 const documents: Documents = {
+    "\n  mutation CreateDeployment($input: DeploymentInput!) {\n    createDeployment(input: $input) {\n      id\n      name\n      description\n      deployer\n    }\n  }\n": types.CreateDeploymentDocument,
     "\n  query AdminQuery {\n    deployments {\n      id\n      name\n      status\n      deployer\n      description\n      createdAt\n      updatedAt\n    }\n  }\n": types.AdminQueryDocument,
     "\n  query IndexQuery {\n    deployments {\n      id\n      name\n      status\n      deployer\n      description\n      createdAt\n      updatedAt\n    }\n  }\n": types.IndexQueryDocument,
 };
@@ -36,6 +38,10 @@ const documents: Documents = {
  */
 export function gql(source: string): unknown;
 
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CreateDeployment($input: DeploymentInput!) {\n    createDeployment(input: $input) {\n      id\n      name\n      description\n      deployer\n    }\n  }\n"): (typeof documents)["\n  mutation CreateDeployment($input: DeploymentInput!) {\n    createDeployment(input: $input) {\n      id\n      name\n      description\n      deployer\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

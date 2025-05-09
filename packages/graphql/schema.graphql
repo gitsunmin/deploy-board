@@ -19,13 +19,20 @@ enum DeploymentStatus {
   FAILED
 }
 
+input DeploymentInput {
+  name: String!
+  description: String!
+  deployer: String!
+  status: DeploymentStatus!
+}
+
 type Query {
   deployments: [Deployment!]!
 }
 
 type Mutation {
-  createDeployment(name: String!, description: String): Deployment!
-  updateDeployment(id: ID!, name: String, description: String): Deployment!
+  createDeployment(input: DeploymentInput!): Deployment!
+  updateDeployment(id: ID!, input: DeploymentInput!): Deployment!
   deleteDeployment(id: ID!): Boolean!
 }
 

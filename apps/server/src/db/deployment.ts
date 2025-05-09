@@ -38,6 +38,6 @@ const defaultData: Database = {
 };
 
 
-const DATA_BASE: Low<Database> = await JSONFilePreset('db.json', defaultData);
+const DATA_BASE: Low<Database> = await JSONFilePreset('../../db.json', defaultData);
 
 export default DATA_BASE;
