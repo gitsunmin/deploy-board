@@ -43,12 +43,26 @@ const DELETE_DEPLOYMENT = gql`
   }
 `;
 
+const UPDATE_DEPLOYMENT = gql`
+  mutation UpdateDeployment($id: ID!, $input: DeploymentInput!) {
+    updateDeployment(id: $id, input: $input) {
+      id
+      name
+      description
+      deployer
+      status
+    }
+  }
+`;
+
 type Props = {
   data: Deployment;
 };
 
 export const UpdateDeploymentForm = ({ data }: Props) => {
   const [deleteDeploymentMutation] = useMutation(DELETE_DEPLOYMENT);
+  const [updateDeploymentMutation] = useMutation(UPDATE_DEPLOYMENT);
+
   const form = useForm<z.infer<typeof updateDeploymentFormSchema>>({
     resolver: zodResolver(updateDeploymentFormSchema),
     defaultValues: {
@@ -61,12 +75,34 @@ export const UpdateDeploymentForm = ({ data }: Props) => {
   });
 
   const handleSubmit = (data: z.infer<typeof updateDeploymentFormSchema>) => {
-    // updateDeploymentRequest(data.id, data);
+    updateDeploymentMutation({
+      variables: {
+        id: data.id,
+        input: {
+          name: data.name,
+          description: data.description,
+          deployer: data.deployer,
+          status: data.status,
+        },
+      },
+      onCompleted: (res) => {
+        console.log("Update deployment response", res);
+      },
+    }).catch((err) => {
+      console.error("Error updating deployment", err);
+    });
   };
 
   const handleDelete = (id: string) => () => {
-    // deleteDeploymentRequest(id);
-    deleteDeploymentMutation({ variables: { id } });
+    deleteDeploymentMutation({
+      variables: { id },
+      onCompleted: (res) => {
+        console.log("Delete deployment response", res);
+      },
+      onError: (err) => {
+        console.error("Error deleting deployment", err);
+      },
+    });
   };
 
   return (
