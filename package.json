@@ -5,7 +5,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "bunx biome lint --write .",
-    "gen:schema-type": "turbo run gen:schema-type",
+    "gen:graphql-type": "turbo run gen:graphql-type",
     "format": "bunx biome format --write ."
   },
   "devDependencies": {
@@ -14,5 +14,8 @@
     "turbo": "^2.5.2"
   },
   "packageManager": "bun@1.2.11",
-  "workspaces": ["apps/*", "packages/*"]
+  "workspaces": ["apps/*", "packages/*"],
+  "dependencies": {
+    "ts-pattern": "^5.7.0"
+  }
 }

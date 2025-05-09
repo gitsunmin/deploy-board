@@ -7,9 +7,10 @@
     "dev": "vite --clearScreen false",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint \"src/**/*.ts\""
+    "gen:graphql-type": "graphql-codegen"
   },
   "dependencies": {
+    "@apollo/client": "^3.13.8",
     "@hookform/resolvers": "^5.0.1",
     "@radix-ui/react-alert-dialog": "^1.1.11",
     "@radix-ui/react-label": "^2.1.4",
@@ -30,6 +31,9 @@
     "zod": "^3.24.3"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.6",
+    "@graphql-codegen/client-preset": "^4.8.1",
+    "@graphql-typed-document-node/core": "^3.2.0",
     "@repo/typescript-config": "*",
     "@tanstack/router-plugin": "^1.119.0",
     "@types/node": "^22.15.10",

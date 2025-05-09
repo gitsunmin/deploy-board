@@ -13,6 +13,7 @@ export default defineConfig({
   resolve: {
     alias: [
       { find: '@', replacement: path.resolve(__dirname, 'src') },
+      { find: '@repo', replacement: path.resolve(__dirname, '../../packages') }
     ],
   },
 });

@@ -68,6 +68,13 @@ export type Query = {
   readonly deployments: ReadonlyArray<Deployment>;
 };
 
+export type Subscription = {
+  readonly __typename?: 'Subscription';
+  readonly deploymentCreated: Deployment;
+  readonly deploymentDeleted: Scalars['ID']['output'];
+  readonly deploymentUpdated: Deployment;
+};
+
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -151,6 +158,7 @@ export type ResolversTypes = {
   Node: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Node']>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  Subscription: ResolverTypeWrapper<{}>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -162,6 +170,7 @@ export type ResolversParentTypes = {
   Node: ResolversInterfaceTypes<ResolversParentTypes>['Node'];
   Query: {};
   String: Scalars['String']['output'];
+  Subscription: {};
 };
 
 export type DeploymentResolvers<ContextType = any, ParentType extends ResolversParentTypes['Deployment'] = ResolversParentTypes['Deployment']> = {
@@ -190,10 +199,17 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   deployments?: Resolver<ReadonlyArray<ResolversTypes['Deployment']>, ParentType, ContextType>;
 };
 
+export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  deploymentCreated?: SubscriptionResolver<ResolversTypes['Deployment'], "deploymentCreated", ParentType, ContextType>;
+  deploymentDeleted?: SubscriptionResolver<ResolversTypes['ID'], "deploymentDeleted", ParentType, ContextType>;
+  deploymentUpdated?: SubscriptionResolver<ResolversTypes['Deployment'], "deploymentUpdated", ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   Deployment?: DeploymentResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Node?: NodeResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
 };
 

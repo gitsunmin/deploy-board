@@ -19,12 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { DEPLOYMENT_STATUS } from "@/constants/deployment";
 import { Button } from "@/components/ui/button";
-import {
-  deleteDeploymentRequest,
-  updateDeploymentRequest,
-} from "@/apiClient/deployment/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Trash2 } from "lucide-react";
@@ -39,7 +34,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import type { Deployment } from "@repo/types/schema";
+import { DeploymentStatus, type Deployment } from "@repo/types/graphql";
 
 type Props = {
   data: Deployment;
@@ -58,11 +53,11 @@ export const UpdateDeploymentForm = ({ data }: Props) => {
   });
 
   const handleSubmit = (data: z.infer<typeof updateDeploymentFormSchema>) => {
-    updateDeploymentRequest(data.id, data);
+    // updateDeploymentRequest(data.id, data);
   };
 
   const handleDelete = (id: string) => () => {
-    deleteDeploymentRequest(id);
+    // deleteDeploymentRequest(id);
   };
 
   return (
@@ -154,7 +149,12 @@ export const UpdateDeploymentForm = ({ data }: Props) => {
                               <SelectValue placeholder="Status" />
                             </SelectTrigger>
                             <SelectContent>
-                              {DEPLOYMENT_STATUS.map((status) => {
+                              {[
+                                DeploymentStatus.Failed,
+                                DeploymentStatus.InProgress,
+                                DeploymentStatus.Pending,
+                                DeploymentStatus.Success,
+                              ].map((status) => {
                                 return (
                                   <SelectItem
                                     key={status}

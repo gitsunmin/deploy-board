@@ -1,6 +1,6 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import type { z } from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import type { z } from "zod";
 import {
   Form,
   FormControl,
@@ -8,17 +8,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { addDeploymentFormSchema } from '@/formSchema/addDeployment';
-import { Textarea } from '@/components/ui/textarea';
-import { PlusIcon } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { addDeploymentRequest } from '@/apiClient/deployment/client';
-import { useRef, useState } from 'react';
-import { cn } from '@/lib/utils';
-
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { addDeploymentFormSchema } from "@/formSchema/addDeployment";
+import { Textarea } from "@/components/ui/textarea";
+import { PlusIcon } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { useRef, useState } from "react";
+import { cn } from "@/lib/utils";
 
 export const AddDeploymentForm = () => {
   const [creating, setCreating] = useState(false);
@@ -27,9 +25,9 @@ export const AddDeploymentForm = () => {
   const form = useForm<z.infer<typeof addDeploymentFormSchema>>({
     resolver: zodResolver(addDeploymentFormSchema),
     defaultValues: {
-      name: '',
-      description: '',
-      deployer: '',
+      name: "",
+      description: "",
+      deployer: "",
     },
   });
 
@@ -39,27 +37,23 @@ export const AddDeploymentForm = () => {
     setTimeout(() => {
       if (ref.current) {
         ref.current.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
+          behavior: "smooth",
+          block: "start",
         });
       }
     }, 300);
-  }
+  };
 
   const onSubmit = (data: z.infer<typeof addDeploymentFormSchema>) => {
-    addDeploymentRequest(data);
     setCreating(false);
   };
 
   return (
     <>
-
       <Card
-        className={cn('bg-amber-50',
-          {
-            'hidden': !creating,
-          }
-        )}
+        className={cn("bg-amber-50", {
+          hidden: !creating,
+        })}
         ref={ref}
       >
         <CardContent>
@@ -120,12 +114,15 @@ export const AddDeploymentForm = () => {
           </Form>
         </CardContent>
       </Card>
-      {
-        creating ||
-        <Button className="mt-4 w-full" variant="outline" onClick={handleDefaultDeployment}>
+      {creating || (
+        <Button
+          className="mt-4 w-full"
+          variant="outline"
+          onClick={handleDefaultDeployment}
+        >
           <PlusIcon />
         </Button>
-      }
+      )}
     </>
   );
 };

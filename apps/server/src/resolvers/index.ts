@@ -1,7 +1,7 @@
 
 import type { Resolvers } from '@repo/types/schema';
-import { Mutation } from './mutations';
-import { Query } from './queries';
+import { Mutation } from '@/resolvers/mutations';
+import { Query } from '@/resolvers/queries';
 
 export const resolvers: Resolvers = {
     Query,

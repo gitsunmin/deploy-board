@@ -14,7 +14,7 @@
       ]
     },
     "lint": {},
-    "gen:schema-type": {
+    "gen:graphql-type": {
       "cache": false,
       "persistent": true
     },
