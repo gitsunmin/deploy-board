@@ -13,11 +13,32 @@ export const Mutation: Resolvers['Mutation'] = {
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
         }
-        DATA_BASE.update(({ deployments }) => {
-            deployments.push(newDeployment);
-            DATA_BASE.write();
-        });
-        
-        return newDeployment;
-    }
+
+        try {
+            DATA_BASE.update(({ deployments }) => {
+                deployments.push(newDeployment);
+                DATA_BASE.write();
+            });
+            
+            return newDeployment;
+        } catch (error) {
+            console.error("Error creating deployment:", error);
+            throw new Error("Failed to create deployment");
+        }
+    },
+    deleteDeployment: async (_, { id }, {}) => {
+        try {
+            DATA_BASE.update(({ deployments }) => {
+                const index = deployments.findIndex((dep) => dep.id === id);
+                if (index !== -1) {
+                    deployments.splice(index, 1);
+                }
+                DATA_BASE.write();
+            });
+            return true;
+        } catch (error) {
+            console.error("Error deleting deployment:", error);
+            return false;
+        }
+    },
 };

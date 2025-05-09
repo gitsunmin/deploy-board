@@ -35,12 +35,20 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { DeploymentStatus, type Deployment } from "@repo/types/graphql";
+import { gql, useMutation } from "@apollo/client";
+
+const DELETE_DEPLOYMENT = gql`
+  mutation DeleteDeployment($id: ID!) {
+    deleteDeployment(id: $id)
+  }
+`;
 
 type Props = {
   data: Deployment;
 };
 
 export const UpdateDeploymentForm = ({ data }: Props) => {
+  const [deleteDeploymentMutation] = useMutation(DELETE_DEPLOYMENT);
   const form = useForm<z.infer<typeof updateDeploymentFormSchema>>({
     resolver: zodResolver(updateDeploymentFormSchema),
     defaultValues: {
@@ -58,6 +66,7 @@ export const UpdateDeploymentForm = ({ data }: Props) => {
 
   const handleDelete = (id: string) => () => {
     // deleteDeploymentRequest(id);
+    deleteDeploymentMutation({ variables: { id } });
   };
 
   return (

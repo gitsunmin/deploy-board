@@ -15,11 +15,13 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 type Documents = {
     "\n  mutation CreateDeployment($input: DeploymentInput!) {\n    createDeployment(input: $input) {\n      id\n      name\n      description\n      deployer\n    }\n  }\n": typeof types.CreateDeploymentDocument,
+    "\n  mutation DeleteDeployment($id: ID!) {\n    deleteDeployment(id: $id)\n  }\n": typeof types.DeleteDeploymentDocument,
     "\n  query AdminQuery {\n    deployments {\n      id\n      name\n      status\n      deployer\n      description\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.AdminQueryDocument,
     "\n  query IndexQuery {\n    deployments {\n      id\n      name\n      status\n      deployer\n      description\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.IndexQueryDocument,
 };
 const documents: Documents = {
     "\n  mutation CreateDeployment($input: DeploymentInput!) {\n    createDeployment(input: $input) {\n      id\n      name\n      description\n      deployer\n    }\n  }\n": types.CreateDeploymentDocument,
+    "\n  mutation DeleteDeployment($id: ID!) {\n    deleteDeployment(id: $id)\n  }\n": types.DeleteDeploymentDocument,
     "\n  query AdminQuery {\n    deployments {\n      id\n      name\n      status\n      deployer\n      description\n      createdAt\n      updatedAt\n    }\n  }\n": types.AdminQueryDocument,
     "\n  query IndexQuery {\n    deployments {\n      id\n      name\n      status\n      deployer\n      description\n      createdAt\n      updatedAt\n    }\n  }\n": types.IndexQueryDocument,
 };
@@ -42,6 +44,10 @@ export function gql(source: string): unknown;
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation CreateDeployment($input: DeploymentInput!) {\n    createDeployment(input: $input) {\n      id\n      name\n      description\n      deployer\n    }\n  }\n"): (typeof documents)["\n  mutation CreateDeployment($input: DeploymentInput!) {\n    createDeployment(input: $input) {\n      id\n      name\n      description\n      deployer\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation DeleteDeployment($id: ID!) {\n    deleteDeployment(id: $id)\n  }\n"): (typeof documents)["\n  mutation DeleteDeployment($id: ID!) {\n    deleteDeployment(id: $id)\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
