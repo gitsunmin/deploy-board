@@ -6,7 +6,8 @@
     "dev": "turbo run dev",
     "lint": "bunx biome lint --write .",
     "gen:graphql-type": "turbo run gen:graphql-type",
-    "format": "bunx biome format --write ."
+    "format": "bunx biome format --write .",
+    "watch:all": "turbo run watch:all"
   },
   "devDependencies": {
     "eslint": "^8.57.0",

@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "bun index.ts",
-    "gen:graphql-type": "graphql-codegen"
+    "gen:graphql-type": "graphql-codegen --watch"
   },
   "devDependencies": {
     "@repo/graphql": "*",

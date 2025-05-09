@@ -38,7 +38,6 @@ function Index() {
         <CardContent>
           <ul className="space-y-4">
             {data.deployments.map((dep) => {
-              console.log("dep:", dep);
               return (
                 <li key={dep.id} className="py-2">
                   <div className="flex justify-between items-center">

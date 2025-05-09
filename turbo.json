@@ -21,6 +21,14 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "watch:all": {
+      "with": [
+        "gen:graphql-type",
+        "dev"
+      ],
+      "persistent": true,
+      "cache": false
     }
   }
 }
