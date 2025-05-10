@@ -75,9 +75,9 @@ export type Query = {
 
 export type Subscription = {
   __typename?: 'Subscription';
-  deploymentCreated: Deployment;
-  deploymentDeleted: Scalars['ID']['output'];
-  deploymentUpdated: Deployment;
+  deploymentCreated: Array<Deployment>;
+  deploymentDeleted: Array<Deployment>;
+  deploymentUpdated: Array<Deployment>;
 };
 
 export type CreateDeploymentMutationVariables = Exact<{

@@ -75,9 +75,9 @@ export type Query = {
 
 export type Subscription = {
   readonly __typename?: 'Subscription';
-  readonly deploymentCreated: Deployment;
-  readonly deploymentDeleted: Scalars['ID']['output'];
-  readonly deploymentUpdated: Deployment;
+  readonly deploymentCreated: ReadonlyArray<Deployment>;
+  readonly deploymentDeleted: ReadonlyArray<Deployment>;
+  readonly deploymentUpdated: ReadonlyArray<Deployment>;
 };
 
 
@@ -207,9 +207,9 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
-  deploymentCreated?: SubscriptionResolver<ResolversTypes['Deployment'], "deploymentCreated", ParentType, ContextType>;
-  deploymentDeleted?: SubscriptionResolver<ResolversTypes['ID'], "deploymentDeleted", ParentType, ContextType>;
-  deploymentUpdated?: SubscriptionResolver<ResolversTypes['Deployment'], "deploymentUpdated", ParentType, ContextType>;
+  deploymentCreated?: SubscriptionResolver<ReadonlyArray<ResolversTypes['Deployment']>, "deploymentCreated", ParentType, ContextType>;
+  deploymentDeleted?: SubscriptionResolver<ReadonlyArray<ResolversTypes['Deployment']>, "deploymentDeleted", ParentType, ContextType>;
+  deploymentUpdated?: SubscriptionResolver<ReadonlyArray<ResolversTypes['Deployment']>, "deploymentUpdated", ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
