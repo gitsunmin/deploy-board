@@ -1,13 +1,8 @@
-import { getDeploymentsRequest } from "@/apiClient/deployment/client";
 import { AddDeploymentForm } from "@/components/AddDeploymentForm";
 import { UpdateDeploymentForm } from "@/components/UpdateDeploymentForm";
 import { gql, useQuery } from "@apollo/client";
-import type { Query } from "@repo/types/schema";
+import type { AdminQueryQuery } from '@repo/types/graphql';
 import { createFileRoute } from "@tanstack/react-router";
-
-type QueryResponse = {
-  deployments: Query["deployments"];
-};
 
 const Query = gql`
   query AdminQuery {
@@ -28,7 +23,7 @@ export const Route = createFileRoute("/_layout/admin/")({
 });
 
 function RouteComponent() {
-  const { data = { deployments: [] } } = useQuery<QueryResponse, {}>(Query);
+  const { data = { deployments: [] } } = useQuery<AdminQueryQuery>(Query);
 
   return (
     <div className="p-4">

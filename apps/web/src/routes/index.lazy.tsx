@@ -2,15 +2,11 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { gql, useQuery } from "@apollo/client";
-import type { Query } from "@repo/types/schema";
+import type { IndexQueryQuery } from '@repo/types/graphql';
 
 export const Route = createLazyFileRoute("/")({
   component: Index,
 });
-
-type QueryResponse = {
-  deployments: Query["deployments"];
-};
 
 const Query = gql`
   query IndexQuery {
@@ -27,7 +23,7 @@ const Query = gql`
 `;
 
 function Index() {
-  const { data = { deployments: [] } } = useQuery<QueryResponse, {}>(Query);
+  const { data = { deployments: [] } } = useQuery<IndexQueryQuery>(Query);
 
   return (
     <div className="p-4">

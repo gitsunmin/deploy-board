@@ -18,6 +18,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { gql, useMutation } from "@apollo/client";
+import type { CreateDeploymentMutation } from '@repo/types/graphql';
 
 const CREATE_DEPLOYMENT = gql`
   mutation CreateDeployment($input: DeploymentInput!) {
@@ -33,8 +34,8 @@ const CREATE_DEPLOYMENT = gql`
 export const AddDeploymentForm = () => {
   const [creating, setCreating] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const [createDeploymentMutation, { data, loading, error }] =
-    useMutation(CREATE_DEPLOYMENT);
+  const [createDeploymentMutation] =
+    useMutation<CreateDeploymentMutation>(CREATE_DEPLOYMENT);
 
   const form = useForm<z.infer<typeof addDeploymentFormSchema>>({
     resolver: zodResolver(addDeploymentFormSchema),
