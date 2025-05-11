@@ -41,11 +41,23 @@ export enum DeploymentStatus {
   Success = 'SUCCESS'
 }
 
+export type Document = {
+  readonly __typename?: 'Document';
+  readonly description: Scalars['String']['output'];
+  readonly title: Scalars['String']['output'];
+};
+
+export type DocumentInput = {
+  readonly description: Scalars['String']['input'];
+  readonly title: Scalars['String']['input'];
+};
+
 export type Mutation = {
   readonly __typename?: 'Mutation';
   readonly createDeployment: Deployment;
   readonly deleteDeployment: Scalars['Boolean']['output'];
   readonly updateDeployment: Deployment;
+  readonly updateDocument: Document;
 };
 
 
@@ -64,6 +76,11 @@ export type MutationUpdateDeploymentArgs = {
   input: DeploymentInput;
 };
 
+
+export type MutationUpdateDocumentArgs = {
+  input: DocumentInput;
+};
+
 export type Node = {
   readonly id: Scalars['ID']['output'];
 };
@@ -71,6 +88,7 @@ export type Node = {
 export type Query = {
   readonly __typename?: 'Query';
   readonly deployments: ReadonlyArray<Deployment>;
+  readonly document: Document;
 };
 
 export type Subscription = {
@@ -78,6 +96,7 @@ export type Subscription = {
   readonly deploymentCreated: ReadonlyArray<Deployment>;
   readonly deploymentDeleted: ReadonlyArray<Deployment>;
   readonly deploymentUpdated: ReadonlyArray<Deployment>;
+  readonly documentUpdated: Document;
 };
 
 
@@ -150,7 +169,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping of interface types */
 export type ResolversInterfaceTypes<_RefType extends Record<string, unknown>> = {
-  Node: (Deployment);
+  Node: ( Deployment );
 };
 
 /** Mapping between all available schema types and the resolvers types */
@@ -159,6 +178,8 @@ export type ResolversTypes = {
   Deployment: ResolverTypeWrapper<Deployment>;
   DeploymentInput: DeploymentInput;
   DeploymentStatus: DeploymentStatus;
+  Document: ResolverTypeWrapper<Document>;
+  DocumentInput: DocumentInput;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
   Node: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Node']>;
@@ -172,6 +193,8 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   Deployment: Deployment;
   DeploymentInput: DeploymentInput;
+  Document: Document;
+  DocumentInput: DocumentInput;
   ID: Scalars['ID']['output'];
   Mutation: {};
   Node: ResolversInterfaceTypes<ResolversParentTypes>['Node'];
@@ -191,10 +214,17 @@ export type DeploymentResolvers<ContextType = any, ParentType extends ResolversP
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type DocumentResolvers<ContextType = any, ParentType extends ResolversParentTypes['Document'] = ResolversParentTypes['Document']> = {
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createDeployment?: Resolver<ResolversTypes['Deployment'], ParentType, ContextType, RequireFields<MutationCreateDeploymentArgs, 'input'>>;
   deleteDeployment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteDeploymentArgs, 'id'>>;
   updateDeployment?: Resolver<ResolversTypes['Deployment'], ParentType, ContextType, RequireFields<MutationUpdateDeploymentArgs, 'id' | 'input'>>;
+  updateDocument?: Resolver<ResolversTypes['Document'], ParentType, ContextType, RequireFields<MutationUpdateDocumentArgs, 'input'>>;
 };
 
 export type NodeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']> = {
@@ -204,16 +234,19 @@ export type NodeResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   deployments?: Resolver<ReadonlyArray<ResolversTypes['Deployment']>, ParentType, ContextType>;
+  document?: Resolver<ResolversTypes['Document'], ParentType, ContextType>;
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   deploymentCreated?: SubscriptionResolver<ReadonlyArray<ResolversTypes['Deployment']>, "deploymentCreated", ParentType, ContextType>;
   deploymentDeleted?: SubscriptionResolver<ReadonlyArray<ResolversTypes['Deployment']>, "deploymentDeleted", ParentType, ContextType>;
   deploymentUpdated?: SubscriptionResolver<ReadonlyArray<ResolversTypes['Deployment']>, "deploymentUpdated", ParentType, ContextType>;
+  documentUpdated?: SubscriptionResolver<ResolversTypes['Document'], "documentUpdated", ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
   Deployment?: DeploymentResolvers<ContextType>;
+  Document?: DocumentResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Node?: NodeResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

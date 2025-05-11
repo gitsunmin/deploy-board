@@ -1,4 +1,4 @@
-import DATA_BASE from '@/db/deployment';
+import DATA_BASE from '@/db';
 import type { Resolvers } from '@repo/types/schema';
 import type { PubSub } from 'graphql-subscriptions';
 
@@ -86,6 +86,21 @@ export const Mutation = ({ pubSub }: Options): Resolvers['Mutation'] => {
             } catch (error) {
                 console.error("Error updating deployment:", error);
                 throw new Error("Failed to update deployment");
+            }
+        },
+        updateDocument: async (_, { input }) => {
+            const { title, description } = input;
+            try {
+                await DATA_BASE.update(({ document }) => {
+                    document.title = title;
+                    document.description = description;
+                    DATA_BASE.write();
+                });
+                console.log("Document updated:", DATA_BASE.data.document);
+                return DATA_BASE.data.document;
+            } catch (error) {
+                console.error("Error updating document:", error);
+                throw new Error("Failed to update document");
             }
         },
     };

@@ -17,7 +17,7 @@ type Documents = {
     "\n  mutation CreateDeployment($input: DeploymentInput!) {\n    createDeployment(input: $input) {\n      id\n      name\n      description\n      deployer\n    }\n  }\n": typeof types.CreateDeploymentDocument,
     "\n  mutation DeleteDeployment($id: ID!) {\n    deleteDeployment(id: $id)\n  }\n": typeof types.DeleteDeploymentDocument,
     "\n  mutation UpdateDeployment($id: ID!, $input: DeploymentInput!) {\n    updateDeployment(id: $id, input: $input) {\n      id\n      name\n      description\n      deployer\n      status\n    }\n  }\n": typeof types.UpdateDeploymentDocument,
-    "\n  query AdminPage {\n    deployments {\n      id\n      name\n      status\n      deployer\n      description\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.AdminPageDocument,
+    "\n  query AdminPage {\n    document {\n      title\n      description\n    }\n    deployments {\n      id\n      name\n      status\n      deployer\n      description\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.AdminPageDocument,
     "\n  subscription AdminDeploymentCreated {\n    deploymentCreated {\n      id\n      name\n      status\n      deployer\n      description\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.AdminDeploymentCreatedDocument,
     "\n  subscription AdminDeploymentUpdated {\n    deploymentUpdated {\n      id\n      name\n      status\n      deployer\n      description\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.AdminDeploymentUpdatedDocument,
     "\n  subscription AdminDeploymentDeleted {\n    deploymentDeleted {\n      id\n      name\n      status\n      deployer\n      description\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.AdminDeploymentDeletedDocument,
@@ -30,7 +30,7 @@ const documents: Documents = {
     "\n  mutation CreateDeployment($input: DeploymentInput!) {\n    createDeployment(input: $input) {\n      id\n      name\n      description\n      deployer\n    }\n  }\n": types.CreateDeploymentDocument,
     "\n  mutation DeleteDeployment($id: ID!) {\n    deleteDeployment(id: $id)\n  }\n": types.DeleteDeploymentDocument,
     "\n  mutation UpdateDeployment($id: ID!, $input: DeploymentInput!) {\n    updateDeployment(id: $id, input: $input) {\n      id\n      name\n      description\n      deployer\n      status\n    }\n  }\n": types.UpdateDeploymentDocument,
-    "\n  query AdminPage {\n    deployments {\n      id\n      name\n      status\n      deployer\n      description\n      createdAt\n      updatedAt\n    }\n  }\n": types.AdminPageDocument,
+    "\n  query AdminPage {\n    document {\n      title\n      description\n    }\n    deployments {\n      id\n      name\n      status\n      deployer\n      description\n      createdAt\n      updatedAt\n    }\n  }\n": types.AdminPageDocument,
     "\n  subscription AdminDeploymentCreated {\n    deploymentCreated {\n      id\n      name\n      status\n      deployer\n      description\n      createdAt\n      updatedAt\n    }\n  }\n": types.AdminDeploymentCreatedDocument,
     "\n  subscription AdminDeploymentUpdated {\n    deploymentUpdated {\n      id\n      name\n      status\n      deployer\n      description\n      createdAt\n      updatedAt\n    }\n  }\n": types.AdminDeploymentUpdatedDocument,
     "\n  subscription AdminDeploymentDeleted {\n    deploymentDeleted {\n      id\n      name\n      status\n      deployer\n      description\n      createdAt\n      updatedAt\n    }\n  }\n": types.AdminDeploymentDeletedDocument,
@@ -69,7 +69,7 @@ export function gql(source: "\n  mutation UpdateDeployment($id: ID!, $input: Dep
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query AdminPage {\n    deployments {\n      id\n      name\n      status\n      deployer\n      description\n      createdAt\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  query AdminPage {\n    deployments {\n      id\n      name\n      status\n      deployer\n      description\n      createdAt\n      updatedAt\n    }\n  }\n"];
+export function gql(source: "\n  query AdminPage {\n    document {\n      title\n      description\n    }\n    deployments {\n      id\n      name\n      status\n      deployer\n      description\n      createdAt\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  query AdminPage {\n    document {\n      title\n      description\n    }\n    deployments {\n      id\n      name\n      status\n      deployer\n      description\n      createdAt\n      updatedAt\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

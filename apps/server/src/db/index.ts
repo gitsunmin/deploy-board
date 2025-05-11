@@ -11,13 +11,21 @@ export const DeploymentStatusLabelMap: Record<DeploymentStatus, string> = {
 };
 
 type Database = {
+    document: {
+        title: string;
+        description: string;
+    };
     deployments: Deployment[];
 };
 
 const defaultData: Database = {
+    document: {
+        title: '오늘의 배포',
+        description: '오늘의 배포를 확인하세요.',
+    },
     deployments: [
         {
-            id: '1',
+            id: crypto.randomUUID(),
             name: '배포 항목 1',
             status: DeploymentStatus.Pending,
             deployer: 'deployer1',
@@ -26,7 +34,7 @@ const defaultData: Database = {
             updatedAt: new Date().toISOString(),
         },
         {
-            id: '2',
+            id: crypto.randomUUID(),
             name: '배포 항목 2',
             status: DeploymentStatus.Pending,
             deployer: 'deployer2',
@@ -36,7 +44,6 @@ const defaultData: Database = {
         },
     ],
 };
-
 
 const DATA_BASE: Low<Database> = await JSONFilePreset('../../db.json', defaultData);
 

@@ -1,4 +1,4 @@
-import DATA_BASE from '@/db/deployment';
+import DATA_BASE from '@/db';
 import type { Resolvers } from '@repo/types/schema';
 
 export const Query: Resolvers['Query'] = {
@@ -10,4 +10,17 @@ export const Query: Resolvers['Query'] = {
             return [];
         }
     },
+    document: () => {
+        try {
+            console.log('Fetching document:', DATA_BASE.data.document);
+            return DATA_BASE.data.document;
+        } catch (error) {
+            console.error('Error fetching document:', error);
+            return {
+                title: '',
+                description: '',
+            };
+        }
+    }
+
 };

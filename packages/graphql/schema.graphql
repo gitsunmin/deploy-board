@@ -2,6 +2,11 @@ interface Node {
   id: ID!
 }
 
+type Document {
+  title: String!
+  description: String!
+}
+
 type Deployment implements Node {
   id: ID!
   name: String!
@@ -26,7 +31,13 @@ input DeploymentInput {
   status: DeploymentStatus!
 }
 
+input DocumentInput {
+  title: String!
+  description: String!
+}
+
 type Query {
+  document: Document!
   deployments: [Deployment!]!
 }
 
@@ -34,9 +45,11 @@ type Mutation {
   createDeployment(input: DeploymentInput!): Deployment!
   updateDeployment(id: ID!, input: DeploymentInput!): Deployment!
   deleteDeployment(id: ID!): Boolean!
+  updateDocument(input: DocumentInput!): Document!
 }
 
 type Subscription {
+  documentUpdated: Document!
   deploymentUpdated: [Deployment!]!
   deploymentCreated: [Deployment!]!
   deploymentDeleted: [Deployment!]!

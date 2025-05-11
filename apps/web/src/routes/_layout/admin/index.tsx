@@ -15,6 +15,10 @@ import { useState } from 'react';
 
 const Query = gql`
   query AdminPage {
+    document {
+      title
+      description
+    }
     deployments {
       id
       name
@@ -75,7 +79,8 @@ export const Route = createFileRoute('/_layout/admin/')({
 
 function RouteComponent() {
   const [deploymentList, setDeploymentList] = useState<AdminPageQuery['deployments']>([]);
-  const { data = { deployments: [] } } = useQuery<AdminPageQuery>(Query);
+  const [document, setDocument] = useState<AdminPageQuery['document'] | null>(null);
+  const { data = { deployments: [], document } } = useQuery<AdminPageQuery>(Query);
 
   useSubscription<AdminDeploymentCreatedSubscription, AdminDeploymentCreatedSubscriptionVariables>(
     CreatedSubscription,
@@ -123,10 +128,15 @@ function RouteComponent() {
     if (data.deployments.length > 0) {
       setDeploymentList(data.deployments);
     }
+    setDocument(data.document);
   }, [data.deployments]);
 
   return (
     <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">{document?.title}</h1>
+      <p className="text-gray-600 mb-4">
+        {document?.description}
+      </p>
       <ul className="space-y-4">
         {deploymentList.map((dep) => (
           <li key={dep.id} className="py-2">
