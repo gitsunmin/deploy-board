@@ -150,7 +150,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping of interface types */
 export type ResolversInterfaceTypes<_RefType extends Record<string, unknown>> = {
-  Node: ( Deployment );
+  Node: (Deployment);
 };
 
 /** Mapping between all available schema types and the resolvers types */

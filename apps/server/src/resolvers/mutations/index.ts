@@ -2,7 +2,6 @@ import DATA_BASE from '@/db/deployment';
 import type { Resolvers } from '@repo/types/schema';
 import type { PubSub } from 'graphql-subscriptions';
 
-
 type Options = {
     pubSub: PubSub;
 };
@@ -27,7 +26,9 @@ export const Mutation = ({ pubSub }: Options): Resolvers['Mutation'] => {
                     DATA_BASE.write();
                 });
                 console.log("New deployment created on mutation:", DATA_BASE.data.deployments);
-                pubSub.publish('DEPLOYMENT_CREATED', DATA_BASE.data.deployments);
+                pubSub.publish('DEPLOYMENT_CREATED', {
+                    deploymentCreated: DATA_BASE.data.deployments
+                });
 
                 return newDeployment;
             } catch (error) {
@@ -46,7 +47,9 @@ export const Mutation = ({ pubSub }: Options): Resolvers['Mutation'] => {
                 });
                 console.log("Deployment deleted:", id);
                 console.log("Deployment deleted on mutation:", DATA_BASE.data.deployments);
-                pubSub.publish('DEPLOYMENT_DELETED', DATA_BASE.data.deployments);
+                pubSub.publish('DEPLOYMENT_DELETED', {
+                    deploymentDeleted: DATA_BASE.data.deployments
+                });
                 return true;
             } catch (error) {
                 console.error("Error deleting deployment:", error);
@@ -72,9 +75,10 @@ export const Mutation = ({ pubSub }: Options): Resolvers['Mutation'] => {
                     }
                     DATA_BASE.write();
                 });
-                console.log("Deployment updated:", updateDeployment);
                 console.log("Deployment updated on mutation:", DATA_BASE.data.deployments);
-                pubSub.publish('DEPLOYMENT_UPDATED', DATA_BASE.data.deployments);
+                pubSub.publish('DEPLOYMENT_UPDATED', {
+                    deploymentUpdated: DATA_BASE.data.deployments
+                });
                 if (updateDeployment === null) {
                     throw new Error("Deployment not found");
                 }

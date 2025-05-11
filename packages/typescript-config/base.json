@@ -17,6 +17,7 @@
     "strict": true
   },
   "exclude": [
-    "node_modules", "packages/types/**/*.ts"
+    "node_modules",
+    "packages/types/**/*.ts"
   ]
 }

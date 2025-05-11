@@ -7,6 +7,10 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
+		"include": [
+			"apps/web/**/*",
+			"apps/server/**/*"
+		],
 		"ignore": [
 			".next",
 			"node_modules"
@@ -15,7 +19,8 @@
 	"formatter": {
 		"enabled": true,
 		"indentStyle": "space",
-		"indentWidth": 2
+		"indentWidth": 2,
+		"lineWidth": 100
 	},
 	"organizeImports": {
 		"enabled": true

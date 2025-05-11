@@ -1,11 +1,20 @@
-import { AddDeploymentForm } from "@/components/AddDeploymentForm";
-import { UpdateDeploymentForm } from "@/components/UpdateDeploymentForm";
-import { gql, useQuery, useSubscription } from "@apollo/client";
-import type { AdminQueryQuery, AdminSubscriptionSubscription } from '@repo/types/graphql';
-import { createFileRoute } from "@tanstack/react-router";
+import { AddDeploymentForm } from '@/components/AddDeploymentForm';
+import { UpdateDeploymentForm } from '@/components/UpdateDeploymentForm';
+import { gql, useQuery, useSubscription } from '@apollo/client';
+import type {
+  AdminDeploymentCreatedSubscription,
+  AdminDeploymentCreatedSubscriptionVariables,
+  AdminDeploymentDeletedSubscription,
+  AdminDeploymentDeletedSubscriptionVariables,
+  AdminDeploymentUpdatedSubscription,
+  AdminDeploymentUpdatedSubscriptionVariables,
+  AdminPageQuery,
+} from '@repo/types/graphql';
+import { createFileRoute, useLayoutEffect } from '@tanstack/react-router';
+import { useState } from 'react';
 
 const Query = gql`
-  query AdminQuery {
+  query AdminPage {
     deployments {
       id
       name
@@ -18,8 +27,8 @@ const Query = gql`
   }
 `;
 
-const Subscription = gql`
-  subscription AdminSubscription {
+const CreatedSubscription = gql`
+  subscription AdminDeploymentCreated {
     deploymentCreated {
       id
       name
@@ -32,33 +41,94 @@ const Subscription = gql`
   }
 `;
 
-export const Route = createFileRoute("/_layout/admin/")({
+const UpdatedSubscription = gql`
+  subscription AdminDeploymentUpdated {
+    deploymentUpdated {
+      id
+      name
+      status
+      deployer
+      description
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+const DeletedSubscription = gql`
+  subscription AdminDeploymentDeleted {
+    deploymentDeleted {
+      id
+      name
+      status
+      deployer
+      description
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const Route = createFileRoute('/_layout/admin/')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { data = { deployments: [] } } = useQuery<AdminQueryQuery>(Query);
+  const [deploymentList, setDeploymentList] = useState<AdminPageQuery['deployments']>([]);
+  const { data = { deployments: [] } } = useQuery<AdminPageQuery>(Query);
 
-  const subscriptionData = useSubscription<AdminSubscriptionSubscription>(Subscription, {
-    onComplete: () => {
-      console.log("Subscription completed");
+  useSubscription<AdminDeploymentCreatedSubscription, AdminDeploymentCreatedSubscriptionVariables>(
+    CreatedSubscription,
+    {
+      onData: (response) => {
+        const { data: subscriptionData } = response;
+        const { data = { deploymentCreated: [] } } = subscriptionData;
+        const { deploymentCreated = [] } = data;
+        setDeploymentList(deploymentCreated);
+      },
+      shouldResubscribe: true,
+      errorPolicy: 'all',
     },
-    onData: (data) => {
-      console.log("onData Subscription data:", data);
-    },
-    onError: (error) => {
-      console.error("Subscription error:", error);
-    },
-    shouldResubscribe: true,
-    errorPolicy: "all",
-  });
+  );
 
-  console.log("Component Subscription data:", subscriptionData);
+  useSubscription<AdminDeploymentUpdatedSubscription, AdminDeploymentUpdatedSubscriptionVariables>(
+    UpdatedSubscription,
+    {
+      onData: (response) => {
+        const { data: subscriptionData } = response;
+        const { data = { deploymentUpdated: [] } } = subscriptionData;
+        const { deploymentUpdated = [] } = data;
+        setDeploymentList(deploymentUpdated);
+      },
+      shouldResubscribe: true,
+      errorPolicy: 'all',
+    },
+  );
+
+  useSubscription<AdminDeploymentDeletedSubscription, AdminDeploymentDeletedSubscriptionVariables>(
+    DeletedSubscription,
+    {
+      onData: (response) => {
+        const { data: subscriptionData } = response;
+        const { data = { deploymentDeleted: [] } } = subscriptionData;
+        const { deploymentDeleted = [] } = data;
+        setDeploymentList(deploymentDeleted);
+      },
+      shouldResubscribe: true,
+      errorPolicy: 'all',
+    },
+  );
+
+  useLayoutEffect(() => {
+    if (data.deployments.length > 0) {
+      setDeploymentList(data.deployments);
+    }
+  }, [data.deployments]);
 
   return (
     <div className="p-4">
       <ul className="space-y-4">
-        {data.deployments.map((dep) => (
+        {deploymentList.map((dep) => (
           <li key={dep.id} className="py-2">
             <UpdateDeploymentForm data={dep} />
           </li>

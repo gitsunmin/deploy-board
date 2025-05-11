@@ -1,15 +1,24 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
-import { Separator } from "@/components/ui/separator";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { gql, useQuery } from "@apollo/client";
-import type { IndexQueryQuery } from '@repo/types/graphql';
+import { createLazyFileRoute } from '@tanstack/react-router';
+import { Separator } from '@/components/ui/separator';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { gql, useQuery, useSubscription } from '@apollo/client';
+import type {
+  IndexDeploymentCreatedSubscription,
+  IndexDeploymentCreatedSubscriptionVariables,
+  IndexDeploymentDeletedSubscription,
+  IndexDeploymentDeletedSubscriptionVariables,
+  IndexDeploymentUpdatedSubscription,
+  IndexDeploymentUpdatedSubscriptionVariables,
+  IndexPageQuery,
+} from '@repo/types/graphql';
+import { useLayoutEffect, useState } from 'react';
 
-export const Route = createLazyFileRoute("/")({
+export const Route = createLazyFileRoute('/')({
   component: Index,
 });
 
 const Query = gql`
-  query IndexQuery {
+  query IndexPage {
     deployments {
       id
       name
@@ -22,41 +31,99 @@ const Query = gql`
   }
 `;
 
-// const Subscription = gql`
-//   subscription IndexSubscription {
-//     deploymentCreated {
-//       id
-//       name
-//       status
-//       deployer
-//       description
-//       createdAt
-//       updatedAt
-//     }
-//   }
-// `;
+const CreatedSubscription = gql`
+  subscription IndexDeploymentCreated {
+    deploymentCreated {
+      id
+      name
+      status
+      deployer
+      description
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+const UpdatedSubscription = gql`
+  subscription IndexDeploymentUpdated {
+    deploymentUpdated {
+      id
+      name
+      status
+      deployer
+      description
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+const DeletedSubscription = gql`
+  subscription IndexDeploymentDeleted {
+    deploymentDeleted {
+      id
+      name
+      status
+      deployer
+      description
+      createdAt
+      updatedAt
+    }
+  }
+`;
 
 function Index() {
-  const { data = { deployments: [] } } = useQuery<IndexQueryQuery>(Query);
+  const [deploymentList, setDeploymentList] = useState<IndexPageQuery['deployments']>([]);
+  const { data = { deployments: [] } } = useQuery<IndexPageQuery>(Query);
 
-  // const subscriptionData = useSubscription(Subscription, {
-  //   onSubscriptionData: ({ subscriptionData }) => {
-  //     console.log("New deployment created:", subscriptionData.data);
-  //   },
-  //   onError: (error) => {
-  //     console.error("Subscription error:", error);
-  //   },
-  //   onComplete: () => {
-  //     console.log("Subscription completed");
-  //   },
-  //   onData: (data) => {
-  //     console.log("onData Subscription data:", data);
-  //   },
-  //   shouldResubscribe: true,
-  //   errorPolicy: "all",
-  // });
+  useSubscription<IndexDeploymentCreatedSubscription, IndexDeploymentCreatedSubscriptionVariables>(
+    CreatedSubscription,
+    {
+      onData: (response) => {
+        const { data: subscriptionData } = response;
+        const { data = { deploymentCreated: [] } } = subscriptionData;
+        const { deploymentCreated = [] } = data;
+        setDeploymentList(deploymentCreated);
+      },
+      shouldResubscribe: true,
+      errorPolicy: 'all',
+    },
+  );
 
-  // console.log("Component Subscription data:", subscriptionData);
+  useSubscription<IndexDeploymentUpdatedSubscription, IndexDeploymentUpdatedSubscriptionVariables>(
+    UpdatedSubscription,
+    {
+      onData: (response) => {
+        const { data: subscriptionData } = response;
+        const { data = { deploymentUpdated: [] } } = subscriptionData;
+        const { deploymentUpdated = [] } = data;
+        setDeploymentList(deploymentUpdated);
+      },
+      shouldResubscribe: true,
+      errorPolicy: 'all',
+    },
+  );
+
+  useSubscription<IndexDeploymentDeletedSubscription, IndexDeploymentDeletedSubscriptionVariables>(
+    DeletedSubscription,
+    {
+      onData: (response) => {
+        const { data: subscriptionData } = response;
+        const { data = { deploymentDeleted: [] } } = subscriptionData;
+        const { deploymentDeleted = [] } = data;
+        setDeploymentList(deploymentDeleted);
+      },
+      shouldResubscribe: true,
+      errorPolicy: 'all',
+    },
+  );
+
+  useLayoutEffect(() => {
+    if (data.deployments.length > 0) {
+      setDeploymentList(data.deployments);
+    }
+  }, [data.deployments]);
 
   return (
     <div className="p-4">
@@ -66,7 +133,7 @@ function Index() {
         </CardHeader>
         <CardContent>
           <ul className="space-y-4">
-            {data.deployments.map((dep) => {
+            {deploymentList.map((dep) => {
               return (
                 <li key={dep.id} className="py-2">
                   <div className="flex justify-between items-center">
