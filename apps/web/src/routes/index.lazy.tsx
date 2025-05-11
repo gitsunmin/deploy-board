@@ -22,8 +22,41 @@ const Query = gql`
   }
 `;
 
+// const Subscription = gql`
+//   subscription IndexSubscription {
+//     deploymentCreated {
+//       id
+//       name
+//       status
+//       deployer
+//       description
+//       createdAt
+//       updatedAt
+//     }
+//   }
+// `;
+
 function Index() {
   const { data = { deployments: [] } } = useQuery<IndexQueryQuery>(Query);
+
+  // const subscriptionData = useSubscription(Subscription, {
+  //   onSubscriptionData: ({ subscriptionData }) => {
+  //     console.log("New deployment created:", subscriptionData.data);
+  //   },
+  //   onError: (error) => {
+  //     console.error("Subscription error:", error);
+  //   },
+  //   onComplete: () => {
+  //     console.log("Subscription completed");
+  //   },
+  //   onData: (data) => {
+  //     console.log("onData Subscription data:", data);
+  //   },
+  //   shouldResubscribe: true,
+  //   errorPolicy: "all",
+  // });
+
+  // console.log("Component Subscription data:", subscriptionData);
 
   return (
     <div className="p-4">

@@ -1,16 +1,10 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-import "./style.css";
-
-const client = new ApolloClient({
-  uri: "http://localhost:3000/graphql",
-  cache: new InMemoryCache({}),
-});
-
-// Import the generated route tree
-import { routeTree } from "./routeTree.gen";
+import { ApolloProvider } from "@apollo/client";
+import "@//style.css";
+import { routeTree } from "@/routeTree.gen";
+import { apolloClient } from '@/lib/apolloClient';
 
 // Create a new router instance
 const router = createRouter({ routeTree });
@@ -29,7 +23,7 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <ApolloProvider client={client}>
+      <ApolloProvider client={apolloClient}>
         <RouterProvider router={router} />
       </ApolloProvider>
       ,

@@ -2,7 +2,7 @@
 import { join } from 'node:path';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { CodegenConfig } from '@graphql-codegen/cli';
+import type { CodegenConfig } from '@graphql-codegen/cli';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

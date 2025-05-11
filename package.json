@@ -17,6 +17,7 @@
   "packageManager": "bun@1.2.11",
   "workspaces": ["apps/*", "packages/*"],
   "dependencies": {
+    "graphql-ws": "^6.0.4",
     "ts-pattern": "^5.7.0"
   }
 }

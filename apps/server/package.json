@@ -8,19 +8,24 @@
     "gen:graphql-type": "graphql-codegen --watch"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.5",
+    "@graphql-codegen/typescript": "^4.1.5",
+    "@graphql-codegen/typescript-resolvers": "^4.4.4",
     "@repo/graphql": "*",
     "@repo/typescript-config": "*",
     "@types/bun": "latest",
-    "@graphql-codegen/cli": "^5.0.5",
-    "@graphql-codegen/typescript": "^4.1.5",
-    "@graphql-codegen/typescript-resolvers": "^4.4.4"
+    "@types/cors": "^2.8.18"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
+    "@apollo/server": "^4.12.0",
+    "@graphql-tools/schema": "^10.0.23",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
     "graphql": "^16.11.0",
-    "graphql-yoga": "^5.13.4",
+    "graphql-subscriptions": "^3.0.0",
     "lowdb": "^7.0.1"
   }
 }
