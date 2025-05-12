@@ -13,3 +13,9 @@ bun install
 # Start the server
 bun dev
 ```
+
+## Todo-List
+- [ ] Show the progress of deployment
+- [ ] Show the progress of deployment for each service
+- [ ] Change root page ui to Board Style
+- [ ] Environment variables
