@@ -5,6 +5,9 @@ import path from 'node:path';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
+  server: {
+    allowedHosts: ['boroployment.loca.lt'],
+  },
   plugins: [
     TanStackRouterVite({ target: 'react', autoCodeSplitting: true }),
     tailwindcss(),
@@ -15,5 +18,9 @@ export default defineConfig({
       { find: '@', replacement: path.resolve(__dirname, 'src') },
       { find: '@repo', replacement: path.resolve(__dirname, '../../packages') }
     ],
+  },
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
   },
 });
