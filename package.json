@@ -12,11 +12,15 @@
   "devDependencies": {
     "eslint": "^8.57.0",
     "prettier": "^3.2.5",
-    "turbo": "^2.5.2"
+    "turbo": "^2.5.3"
   },
   "packageManager": "bun@1.2.11",
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "dependencies": {
+    "dotenv": "^16.5.0",
     "graphql-ws": "^6.0.4",
     "ts-pattern": "^5.7.0"
   }

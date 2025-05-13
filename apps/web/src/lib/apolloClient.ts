@@ -2,13 +2,14 @@ import { ApolloClient, ApolloLink, type FetchResult, HttpLink, InMemoryCache, Ne
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
+import { ENV } from '@repo/env';
 
 const httpLink = new HttpLink({
-    uri: 'http://localhost:3000/graphql'
+    uri: `${ENV.SERVER_URI}:${ENV.SERVER_PORT}/graphql`
 });
 
 const wsLink = new GraphQLWsLink(createClient({
-    url: 'ws://localhost:3000/subscriptions',
+    url: `${ENV.WS_SERVER_URI}:${ENV.WS_SERVER_PORT}/subscriptions`,
 }));
 
 // 분할 링크

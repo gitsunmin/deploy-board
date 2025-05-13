@@ -9,6 +9,7 @@ import { useServer } from 'graphql-ws/use/ws';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import cors from 'cors';
 import { expressMiddleware } from '@apollo/server/express4';
+import { ENV } from '@repo/env';
 
 const typeDefs = await Bun.file(Constants.System.SCHEMA_PATH).text();
 
@@ -83,6 +84,6 @@ app.use(
 );
 
 // Now that our HTTP server is fully set up, we can listen to it.
-httpServer.listen(Constants.System.PORT, () => {
-  console.log(`Server is now running on http://localhost:${Constants.System.PORT}/graphql`);
+httpServer.listen(ENV.SERVER_PORT, () => {
+  console.log(`Server is now running on ${ENV.SERVER_URI}:${ENV.SERVER_PORT}/graphql`);
 });
