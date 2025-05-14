@@ -19,3 +19,4 @@ bun dev
 - [ ] Show the progress of deployment for each service
 - [ ] Change root page ui to Board Style
 - [ ] Environment variables
+- [ ] Implement UI to display deployment order
