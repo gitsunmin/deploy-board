@@ -1,7 +1,7 @@
-import { createLazyFileRoute } from '@tanstack/react-router';
-import { Separator } from '@/components/ui/separator';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { gql, useQuery, useSubscription } from '@apollo/client';
+import { createLazyFileRoute } from "@tanstack/react-router";
+import { Separator } from "@/components/ui/separator";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { gql, useQuery, useSubscription } from "@apollo/client";
 import type {
   IndexDeploymentCreatedSubscription,
   IndexDeploymentCreatedSubscriptionVariables,
@@ -10,10 +10,10 @@ import type {
   IndexDeploymentUpdatedSubscription,
   IndexDeploymentUpdatedSubscriptionVariables,
   IndexPageQuery,
-} from '@repo/types/graphql';
-import { useLayoutEffect, useState } from 'react';
+} from "@repo/types/graphql";
+import { useLayoutEffect, useState } from "react";
 
-export const Route = createLazyFileRoute('/')({
+export const Route = createLazyFileRoute("/")({
   component: Index,
 });
 
@@ -74,50 +74,52 @@ const DeletedSubscription = gql`
 `;
 
 function Index() {
-  const [deploymentList, setDeploymentList] = useState<IndexPageQuery['deployments']>([]);
+  const [deploymentList, setDeploymentList] = useState<
+    IndexPageQuery["deployments"]
+  >([]);
   const { data = { deployments: [] } } = useQuery<IndexPageQuery>(Query);
 
-  useSubscription<IndexDeploymentCreatedSubscription, IndexDeploymentCreatedSubscriptionVariables>(
-    CreatedSubscription,
-    {
-      onData: (response) => {
-        const { data: subscriptionData } = response;
-        const { data = { deploymentCreated: [] } } = subscriptionData;
-        const { deploymentCreated = [] } = data;
-        setDeploymentList(deploymentCreated);
-      },
-      shouldResubscribe: true,
-      errorPolicy: 'all',
+  useSubscription<
+    IndexDeploymentCreatedSubscription,
+    IndexDeploymentCreatedSubscriptionVariables
+  >(CreatedSubscription, {
+    onData: (response) => {
+      const { data: subscriptionData } = response;
+      const { data = { deploymentCreated: [] } } = subscriptionData;
+      const { deploymentCreated = [] } = data;
+      setDeploymentList(deploymentCreated);
     },
-  );
+    shouldResubscribe: true,
+    errorPolicy: "all",
+  });
 
-  useSubscription<IndexDeploymentUpdatedSubscription, IndexDeploymentUpdatedSubscriptionVariables>(
-    UpdatedSubscription,
-    {
-      onData: (response) => {
-        const { data: subscriptionData } = response;
-        const { data = { deploymentUpdated: [] } } = subscriptionData;
-        const { deploymentUpdated = [] } = data;
-        setDeploymentList(deploymentUpdated);
-      },
-      shouldResubscribe: true,
-      errorPolicy: 'all',
+  useSubscription<
+    IndexDeploymentUpdatedSubscription,
+    IndexDeploymentUpdatedSubscriptionVariables
+  >(UpdatedSubscription, {
+    onData: (response) => {
+      const { data: subscriptionData } = response;
+      const { data = { deploymentUpdated: [] } } = subscriptionData;
+      const { deploymentUpdated = [] } = data;
+      setDeploymentList(deploymentUpdated);
     },
-  );
+    shouldResubscribe: true,
+    errorPolicy: "all",
+  });
 
-  useSubscription<IndexDeploymentDeletedSubscription, IndexDeploymentDeletedSubscriptionVariables>(
-    DeletedSubscription,
-    {
-      onData: (response) => {
-        const { data: subscriptionData } = response;
-        const { data = { deploymentDeleted: [] } } = subscriptionData;
-        const { deploymentDeleted = [] } = data;
-        setDeploymentList(deploymentDeleted);
-      },
-      shouldResubscribe: true,
-      errorPolicy: 'all',
+  useSubscription<
+    IndexDeploymentDeletedSubscription,
+    IndexDeploymentDeletedSubscriptionVariables
+  >(DeletedSubscription, {
+    onData: (response) => {
+      const { data: subscriptionData } = response;
+      const { data = { deploymentDeleted: [] } } = subscriptionData;
+      const { deploymentDeleted = [] } = data;
+      setDeploymentList(deploymentDeleted);
     },
-  );
+    shouldResubscribe: true,
+    errorPolicy: "all",
+  });
 
   useLayoutEffect(() => {
     if (data.deployments.length > 0) {

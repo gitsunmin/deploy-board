@@ -28,15 +28,6 @@ const wsServer = new WebSocketServer({
 
 const serverCleanup = useServer({
   schema,
-  onConnect: async (ctx) => {
-    console.log('ctx:', ctx.subscriptions);
-    console.log('Connected!');
-  },
-  onDisconnect(ctx, code, reason) {
-    console.log('ctx:', ctx.subscriptions);
-    console.log('Disconnected!:', code, reason);
-  },
-
 }, wsServer);
 
 const server = new ApolloServer({

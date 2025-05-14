@@ -4,7 +4,7 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { ApolloProvider } from "@apollo/client";
 import "@//style.css";
 import { routeTree } from "@/routeTree.gen";
-import { apolloClient } from '@/lib/apolloClient';
+import { apolloClient } from "@/lib/apolloClient";
 
 // Create a new router instance
 const router = createRouter({ routeTree });
@@ -26,7 +26,6 @@ if (!rootElement.innerHTML) {
       <ApolloProvider client={apolloClient}>
         <RouterProvider router={router} />
       </ApolloProvider>
-      ,
     </StrictMode>
   );
 }
