@@ -24,10 +24,22 @@ const httpServer = createServer(app);
 const wsServer = new WebSocketServer({
   server: httpServer,
   path: '/subscriptions',
+  skipUTF8Validation: true, // 추가 - WebSocket 메시지 처리 방식 변경
 });
 
 const serverCleanup = useServer({
   schema,
+  context: (ctx) => {
+    // 컨텍스트 명시적 설정
+    return { ctx };
+  },
+  onConnect: () => {
+    console.log('Client connected to WebSocket');
+    return true;
+  },
+  onDisconnect: () => {
+    console.log('Client disconnected from WebSocket');
+  },
 }, wsServer);
 
 const server = new ApolloServer({
