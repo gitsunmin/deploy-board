@@ -12,7 +12,7 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 export default defineConfig(() => {
   return {
     server: {
-
+      port: ENV.CLIENT_PORT,
       allowedHosts: [ENV.CLIENT_URI],
     },
     plugins: [
