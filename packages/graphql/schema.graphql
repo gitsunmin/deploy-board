@@ -18,6 +18,7 @@ type Deployment implements Node {
 }
 
 enum DeploymentStatus {
+  YET
   PENDING
   IN_PROGRESS
   SUCCESS

@@ -24,7 +24,7 @@ const httpServer = createServer(app);
 const wsServer = new WebSocketServer({
   server: httpServer,
   path: '/subscriptions',
-  skipUTF8Validation: true, // 추가 - WebSocket 메시지 처리 방식 변경
+  skipUTF8Validation: true,
 });
 
 const serverCleanup = useServer({

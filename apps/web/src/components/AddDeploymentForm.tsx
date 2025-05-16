@@ -18,7 +18,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { gql, useMutation } from "@apollo/client";
-import type { CreateDeploymentMutation } from '@repo/types/graphql';
+import {
+  DeploymentStatus,
+  type CreateDeploymentMutation,
+} from "@repo/types/graphql";
 
 const CREATE_DEPLOYMENT = gql`
   mutation CreateDeployment($input: DeploymentInput!) {
@@ -43,7 +46,7 @@ export const AddDeploymentForm = () => {
       name: "",
       description: "",
       deployer: "",
-      status: "PENDING",
+      status: DeploymentStatus.Yet,
     },
   });
 

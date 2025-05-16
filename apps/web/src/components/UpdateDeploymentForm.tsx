@@ -202,6 +202,7 @@ export const UpdateDeploymentForm = ({ data }: Props) => {
                             </SelectTrigger>
                             <SelectContent>
                               {[
+                                DeploymentStatus.Yet,
                                 DeploymentStatus.Failed,
                                 DeploymentStatus.InProgress,
                                 DeploymentStatus.Pending,

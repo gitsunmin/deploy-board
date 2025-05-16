@@ -38,7 +38,8 @@ export enum DeploymentStatus {
   Failed = 'FAILED',
   InProgress = 'IN_PROGRESS',
   Pending = 'PENDING',
-  Success = 'SUCCESS'
+  Success = 'SUCCESS',
+  Yet = 'YET'
 }
 
 export type Document = {
