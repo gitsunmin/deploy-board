@@ -15,7 +15,7 @@ bun dev
 ```
 
 ## Todo-List
-- [ ] Show the progress of deployment
+- [x] Show the progress of deployment
 - [ ] Show the progress of deployment for each service
 - [ ] Change root page ui to Board Style
 - [x] Environment variables
