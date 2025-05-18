@@ -28,6 +28,7 @@ const Query = gql`
       status
       deployer
       description
+      dependsOn
       createdAt
       updatedAt
     }
@@ -42,6 +43,7 @@ const CreatedSubscription = gql`
       status
       deployer
       description
+      dependsOn
       createdAt
       updatedAt
     }
@@ -56,6 +58,7 @@ const UpdatedSubscription = gql`
       status
       deployer
       description
+      dependsOn
       createdAt
       updatedAt
     }
@@ -70,6 +73,7 @@ const DeletedSubscription = gql`
       status
       deployer
       description
+      dependsOn
       createdAt
       updatedAt
     }

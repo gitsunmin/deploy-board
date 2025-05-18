@@ -9,13 +9,14 @@ type Options = {
 export const Mutation = ({ pubSub }: Options): Resolvers['Mutation'] => {
     return {
         createDeployment: async (_, { input }) => {
-            const { name, description, deployer, status } = input;
+            const { name, description, deployer, status, dependsOn } = input;
             const newDeployment = {
                 id: crypto.randomUUID(),
                 name,
                 description,
                 deployer,
                 status,
+                dependsOn,
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
             }
@@ -45,7 +46,6 @@ export const Mutation = ({ pubSub }: Options): Resolvers['Mutation'] => {
                     }
                     DATA_BASE.write();
                 });
-                console.log("Deployment deleted:", id);
                 console.log("Deployment deleted on mutation:", DATA_BASE.data.deployments);
                 pubSub.publish('DEPLOYMENT_DELETED', {
                     deploymentDeleted: DATA_BASE.data.deployments
@@ -57,7 +57,9 @@ export const Mutation = ({ pubSub }: Options): Resolvers['Mutation'] => {
             }
         },
         updateDeployment: async (_, { id, input }) => {
-            const { name, description, deployer, status } = input;
+            const { name, description, deployer, status, dependsOn } = input;
+
+            console.log('dependsOn:', dependsOn);
             try {
                 let updateDeployment = null;
                 await DATA_BASE.update(({ deployments }) => {
@@ -69,6 +71,7 @@ export const Mutation = ({ pubSub }: Options): Resolvers['Mutation'] => {
                             description,
                             deployer,
                             status,
+                            dependsOn,
                             updatedAt: new Date().toISOString(),
                         };
                         deployments[index] = updateDeployment;

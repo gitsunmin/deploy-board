@@ -59,6 +59,7 @@ const UPDATE_DEPLOYMENT = gql`
       description
       deployer
       status
+      dependsOn
     }
   }
 `;
