@@ -15,6 +15,7 @@ type Deployment implements Node {
   deployer: String!
   createdAt: String!
   updatedAt: String!
+  dependsOn: [ID!]
 }
 
 enum DeploymentStatus {

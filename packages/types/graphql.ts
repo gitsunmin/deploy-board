@@ -19,6 +19,7 @@ export type Scalars = {
 export type Deployment = Node & {
   __typename?: 'Deployment';
   createdAt: Scalars['String']['output'];
+  dependsOn?: Maybe<Array<Scalars['ID']['output']>>;
   deployer: Scalars['String']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];

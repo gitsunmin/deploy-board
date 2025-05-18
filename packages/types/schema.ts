@@ -19,6 +19,7 @@ export type Scalars = {
 export type Deployment = Node & {
   readonly __typename?: 'Deployment';
   readonly createdAt: Scalars['String']['output'];
+  readonly dependsOn?: Maybe<ReadonlyArray<Scalars['ID']['output']>>;
   readonly deployer: Scalars['String']['output'];
   readonly description?: Maybe<Scalars['String']['output']>;
   readonly id: Scalars['ID']['output'];
@@ -206,6 +207,7 @@ export type ResolversParentTypes = {
 
 export type DeploymentResolvers<ContextType = any, ParentType extends ResolversParentTypes['Deployment'] = ResolversParentTypes['Deployment']> = {
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  dependsOn?: Resolver<Maybe<ReadonlyArray<ResolversTypes['ID']>>, ParentType, ContextType>;
   deployer?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
