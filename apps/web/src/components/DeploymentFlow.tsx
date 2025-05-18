@@ -39,7 +39,14 @@ const getStatusStyles = (status: DeploymentStatus) => {
 };
 
 // 배포 노드 컴포넌트
-function DeploymentNode({ data }: { data: { label: string; status: DeploymentStatus; description?: string } }) {
+function DeploymentNode({ data }: {
+    data: {
+        label: string;
+        status: DeploymentStatus;
+        description?: string;
+        deployer?: string;
+    }
+}) {
     const isInProgress = data.status === DeploymentStatus.InProgress;
 
     return (
@@ -59,6 +66,15 @@ function DeploymentNode({ data }: { data: { label: string; status: DeploymentSta
             <div className="font-bold">{data.label}</div>
             {data.description && (
                 <div className="text-xs mt-1 truncate max-w-[180px]">{data.description}</div>
+            )}
+            {data.deployer && (
+                <div className="text-xs mt-1 flex items-center">
+                    <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <title>Deployer icon</title>
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <span>{data.deployer}</span>
+                </div>
             )}
             <div className="text-xs mt-1 font-semibold">{data.status}</div>
 
@@ -159,6 +175,7 @@ export function DeploymentFlow({ deployments, className }: DeploymentFlowProps) 
                 data: {
                     label: dep.name,
                     status: dep.status,
+                    deployer: dep.deployer,
                     description: dep.description
                 },
                 sourcePosition: Position.Right,
