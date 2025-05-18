@@ -10,18 +10,19 @@ import {
 import { gql, useQuery, useSubscription } from "@apollo/client";
 import {
   DeploymentStatus,
-  IndexDeploymentCreatedSubscription,
-  IndexDeploymentCreatedSubscriptionVariables,
-  IndexDeploymentDeletedSubscription,
-  IndexDeploymentDeletedSubscriptionVariables,
-  IndexDeploymentUpdatedSubscription,
-  IndexDeploymentUpdatedSubscriptionVariables,
-  IndexPageQuery,
+  type IndexDeploymentCreatedSubscription,
+  type IndexDeploymentCreatedSubscriptionVariables,
+  type IndexDeploymentDeletedSubscription,
+  type IndexDeploymentDeletedSubscriptionVariables,
+  type IndexDeploymentUpdatedSubscription,
+  type IndexDeploymentUpdatedSubscriptionVariables,
+  type IndexPageQuery,
 } from "@repo/types/graphql";
 import { useLayoutEffect, useState, useRef, useEffect } from "react";
 import { LinkifyText } from "@/components/LinkifyText";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { DeploymentFlow } from '@/components/DeploymentFlow';
 
 export const Route = createLazyFileRoute("/")({
   component: Index,
@@ -39,6 +40,7 @@ const Query = gql`
       status
       deployer
       description
+      dependsOn
       createdAt
       updatedAt
     }
@@ -53,6 +55,7 @@ const CreatedSubscription = gql`
       status
       deployer
       description
+      dependsOn
       createdAt
       updatedAt
     }
@@ -67,6 +70,7 @@ const UpdatedSubscription = gql`
       status
       deployer
       description
+      dependsOn
       createdAt
       updatedAt
     }
@@ -81,6 +85,7 @@ const DeletedSubscription = gql`
       status
       deployer
       description
+      dependsOn
       createdAt
       updatedAt
     }
@@ -197,99 +202,6 @@ function Index() {
     }
   }, [data.deployments]);
 
-  // Helper function to get status color
-  const getStatusStyles = (status: DeploymentStatus) => {
-    switch (status) {
-      case DeploymentStatus.InProgress:
-        return "bg-green-100 text-green-800 border-green-300";
-      case DeploymentStatus.Pending:
-        return "bg-yellow-100 text-yellow-800 border-yellow-300";
-      case DeploymentStatus.Failed:
-        return "bg-red-100 text-red-800 border-red-300";
-      case DeploymentStatus.Success:
-        return "bg-blue-100 text-blue-800 border-blue-300";
-      case DeploymentStatus.Yet:
-        return "bg-gray-100 text-gray-800 border-gray-300";
-      default:
-        return "bg-gray-100 text-gray-800 border-gray-300";
-    }
-  };
-
-  // Helper function for status icon
-  const getStatusIcon = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "running":
-        return (
-          <svg className="w-4 h-4 animate-spin mr-1" viewBox="0 0 24 24">
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-              fill="none"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            ></path>
-          </svg>
-        );
-      case "pending":
-        return (
-          <svg
-            className="w-4 h-4 animate-pulse mr-1"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-        );
-      case "failed":
-        return (
-          <svg
-            className="w-4 h-4 mr-1"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-        );
-      case "completed":
-        return (
-          <svg
-            className="w-4 h-4 mr-1"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
-        );
-      default:
-        return null;
-    }
-  };
-
   return (
     <div className="m-4 p-4 min-h-screen bg-gray-50 dark:bg-gray-900">
       <motion.div
@@ -314,7 +226,7 @@ function Index() {
                 </CardDescription>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
+                <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
                 <span className="text-xs text-gray-500">
                   실시간 업데이트 중
                 </span>
@@ -323,96 +235,7 @@ function Index() {
           </CardHeader>
 
           <CardContent className="p-6">
-            <AnimatePresence>
-              {deploymentList.length === 0 ? (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="p-8 text-center text-gray-500"
-                >
-                  현재 활성화된 배포가 없습니다
-                </motion.div>
-              ) : (
-                <ul className="space-y-4">
-                  <AnimatePresence>
-                    {deploymentList.map((dep) => {
-                      // const isUpdated = updatedIds.has(dep.id);
-
-                      return (
-                        <motion.li
-                          key={dep.id}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{
-                            opacity: 1,
-                            x: 0,
-                            // backgroundColor: isUpdated
-                            //   ? [
-                            //       "rgba(236, 253, 245, 0)",
-                            //       "rgba(236, 253, 245, 1)",
-                            //       "rgba(236, 253, 245, 0)",
-                            //     ]
-                            //   : "transparent",
-                          }}
-                          exit={{ opacity: 0, x: 20 }}
-                          transition={{
-                            default: { duration: 0.4 },
-                            backgroundColor: {
-                              duration: 2,
-                              times: [0, 0.5, 1],
-                            },
-                          }}
-                          className={cn(
-                            "rounded-lg border p-4 shadow-sm transition-all duration-300"
-                            // isUpdated ? "border-indigo-300" : "border-gray-200"
-                          )}
-                        >
-                          <div className="flex justify-between items-center">
-                            <div className="flex flex-col">
-                              <span className="font-semibold text-lg flex items-center">
-                                {dep.name}
-                                {/* {isUpdated && (
-                                  <motion.span
-                                    initial={{ scale: 0 }}
-                                    animate={{ scale: 1 }}
-                                    className="ml-2 text-xs px-1.5 py-0.5 bg-indigo-100 text-indigo-800 rounded-full"
-                                  >
-                                    업데이트
-                                  </motion.span>
-                                )} */}
-                              </span>
-                              {dep.description && (
-                                <span className="text-sm text-gray-500 mt-1">
-                                  {dep.description}
-                                </span>
-                              )}
-                              <span className="text-xs text-gray-400 mt-1">
-                                배포자: {dep.deployer || "시스템"} |{" "}
-                                {new Date(
-                                  dep.updatedAt || dep.createdAt
-                                ).toLocaleString("ko-KR")}
-                              </span>
-                            </div>
-
-                            <div className="flex items-center">
-                              <span
-                                className={cn(
-                                  "text-sm px-3 py-1 rounded-full border flex items-center",
-                                  getStatusStyles(dep.status)
-                                )}
-                              >
-                                {getStatusIcon(dep.status)}
-                                {dep.status}
-                              </span>
-                            </div>
-                          </div>
-                        </motion.li>
-                      );
-                    })}
-                  </AnimatePresence>
-                </ul>
-              )}
-            </AnimatePresence>
+            <DeploymentFlow deployments={deploymentList} />
           </CardContent>
         </Card>
       </motion.div>
