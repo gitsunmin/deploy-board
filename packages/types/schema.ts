@@ -29,6 +29,7 @@ export type Deployment = Node & {
 };
 
 export type DeploymentInput = {
+  readonly dependsOn?: InputMaybe<ReadonlyArray<Scalars['ID']['input']>>;
   readonly deployer: Scalars['String']['input'];
   readonly description: Scalars['String']['input'];
   readonly name: Scalars['String']['input'];

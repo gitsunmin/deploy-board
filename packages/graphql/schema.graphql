@@ -31,6 +31,7 @@ input DeploymentInput {
   description: String!
   deployer: String!
   status: DeploymentStatus!
+  dependsOn: [ID!]
 }
 
 input DocumentInput {

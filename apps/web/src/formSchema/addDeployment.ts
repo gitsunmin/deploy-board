@@ -6,4 +6,5 @@ export const addDeploymentFormSchema = z.object({
   description: z.string().optional(),
   deployer: z.string().min(2).max(100),
   status: z.enum([DeploymentStatus.Yet, DeploymentStatus.Failed, DeploymentStatus.InProgress, DeploymentStatus.Pending, DeploymentStatus.Success]),
+  dependsOn: z.array(z.string()),
 });

@@ -15,6 +15,7 @@ import type {
 import { createFileRoute, useLayoutEffect } from "@tanstack/react-router";
 import { useState } from "react";
 
+
 const Query = gql`
   query AdminPage {
     document {
@@ -139,7 +140,7 @@ function RouteComponent() {
   }, [data.deployments]);
 
   return (
-    <div className="p-4">
+    <div className="p-8">
       {data.document && <UpdateDocumentForm data={data.document} />}
 
       <Separator className="my-8 bg-black py-1 rounded-md" />
@@ -147,11 +148,11 @@ function RouteComponent() {
       <ul className="space-y-4">
         {deploymentList.map((dep) => (
           <li key={dep.id} className="py-2">
-            <UpdateDeploymentForm data={dep} />
+            <UpdateDeploymentForm data={dep} deploymentList={deploymentList} />
           </li>
         ))}
       </ul>
-      <AddDeploymentForm />
+      <AddDeploymentForm deploymentList={deploymentList} />
     </div>
   );
 }

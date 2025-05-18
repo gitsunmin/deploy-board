@@ -29,6 +29,7 @@ export type Deployment = Node & {
 };
 
 export type DeploymentInput = {
+  dependsOn?: InputMaybe<Array<Scalars['ID']['input']>>;
   deployer: Scalars['String']['input'];
   description: Scalars['String']['input'];
   name: Scalars['String']['input'];

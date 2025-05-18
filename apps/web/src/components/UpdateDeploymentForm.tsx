@@ -22,7 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Trash2 } from "lucide-react";
+import { Check, ChevronsUpDown, Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -41,6 +41,9 @@ import {
   type Deployment,
 } from "@repo/types/graphql";
 import { gql, useMutation } from "@apollo/client";
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from './ui/command';
+import { cn } from '@/lib/utils';
 
 const DELETE_DEPLOYMENT = gql`
   mutation DeleteDeployment($id: ID!) {
@@ -62,9 +65,10 @@ const UPDATE_DEPLOYMENT = gql`
 
 type Props = {
   data: Deployment;
+  deploymentList: Deployment[];
 };
 
-export const UpdateDeploymentForm = ({ data }: Props) => {
+export const UpdateDeploymentForm = ({ data, deploymentList }: Props) => {
   const [deleteDeploymentMutation] =
     useMutation<DeleteDeploymentMutation>(DELETE_DEPLOYMENT);
   const [updateDeploymentMutation] =
@@ -78,6 +82,7 @@ export const UpdateDeploymentForm = ({ data }: Props) => {
       description: data.description ?? "",
       deployer: data.deployer,
       status: data.status,
+      dependsOn: data.dependsOn ?? [],
     },
   });
 
@@ -90,6 +95,7 @@ export const UpdateDeploymentForm = ({ data }: Props) => {
           description: data.description,
           deployer: data.deployer,
           status: data.status,
+          dependsOn: data.dependsOn,
         },
       },
       onCompleted: (res) => {
@@ -111,6 +117,13 @@ export const UpdateDeploymentForm = ({ data }: Props) => {
       },
     });
   };
+
+  const dependsOnList = deploymentList.filter(
+    (deployment) => deployment.id !== data.id
+  ).map((deployment) => ({
+    id: deployment.id,
+    name: deployment.name,
+  }))
 
   return (
     <>
@@ -150,7 +163,7 @@ export const UpdateDeploymentForm = ({ data }: Props) => {
                   </AlertDialogContent>
                 </AlertDialog>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-4 gap-y-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-4 gap-y-2">
                 <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-4 gap-y-2 col-span-2">
                   <FormField
                     control={form.control}
@@ -184,14 +197,94 @@ export const UpdateDeploymentForm = ({ data }: Props) => {
                     )}
                   />
                 </div>
-                <div>
+                {
+                  dependsOnList.length > 0 && (
+                    <div className='grid grid-cols-1 md:grid-cols-2 md:gap-x-4 gap-y-2 col-span-2 md:col-span-1'>
+                      <FormField
+                        control={form.control}
+                        name="dependsOn"
+                        defaultValue={data.dependsOn ?? []}
+                        render={({ field }) => (
+                          <FormItem className="grid grid-cols-2 items-center col-span-2">
+                            <FormLabel className="py-1 w-24">dependsOn</FormLabel>
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <FormControl className=''>
+                                  <Button
+                                    variant="outline"
+                                    className={cn(
+                                      "justify-between w-full",
+                                      !field.value && "text-muted-foreground"
+                                    )}
+                                  >
+                                    <span className="truncate mr-2 flex-1 text-left">
+                                      {field.value
+                                        ? dependsOnList.filter(
+                                          (deployment) => field.value.includes(deployment.id)
+                                        )?.map((deployment) => deployment.name).join(", ")
+                                        : "Select language"}
+                                    </span>
+                                    <ChevronsUpDown className="opacity-50" />
+                                  </Button>
+                                </FormControl>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-full">
+                                <Command filter={(value, search) => {
+                                  const deployment = dependsOnList.find(d => d.id === value);
+                                  if (!deployment) return 0;
+
+                                  return deployment.name.toLowerCase().includes(search.toLowerCase()) ? 1 : 0;
+                                }}>
+                                  <CommandInput
+                                    placeholder="Search framework..."
+                                    className="h-9"
+                                  />
+                                  <CommandList>
+                                    <CommandEmpty>No deployment found.</CommandEmpty>
+                                    <CommandGroup>
+                                      {dependsOnList.map((deployment) => (
+                                        <CommandItem
+                                          value={deployment.id}
+                                          key={deployment.id}
+                                          onSelect={() => {
+                                            field.onChange(
+                                              field.value.includes(deployment.id)
+                                                ? field.value.filter((id) => id !== deployment.id)
+                                                : [...field.value, deployment.id]
+                                            );
+                                          }}
+                                        >
+                                          {deployment.name}
+                                          <Check
+                                            className={cn(
+                                              "ml-auto",
+                                              field.value.find((dependsOn) => dependsOn === deployment.id)
+                                                ? "opacity-100"
+                                                : "opacity-0"
+                                            )}
+                                          />
+                                        </CommandItem>
+                                      ))}
+                                    </CommandGroup>
+                                  </CommandList>
+                                </Command>
+                              </PopoverContent>
+                            </Popover>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  )
+                }
+                <div className='grid grid-cols-1 md:grid-cols-2 md:gap-x-4 gap-y-2 col-span-2 md:col-span-1'>
                   <FormField
                     control={form.control}
                     name="status"
                     render={({ field }) => (
-                      <FormItem className="flex">
+                      <FormItem className="grid grid-cols-2 items-center col-span-2">
                         <FormLabel className="py-1 w-24">Status</FormLabel>
-                        <FormControl>
+                        <FormControl className="w-full">
                           <Select
                             {...field}
                             defaultValue={field.value}
