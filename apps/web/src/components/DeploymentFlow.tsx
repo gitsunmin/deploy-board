@@ -208,7 +208,6 @@ function Content({ deployments, className }: DeploymentFlowProps) {
         setNodes(newNodes);
         setEdges(newEdges);
         setLayouting(false);
-        setTimeout(() => reactFlowInstance.fitView(), 50);
 
     }, [deployments, setNodes, setEdges, reactFlowInstance]);
 
@@ -231,8 +230,6 @@ function Content({ deployments, className }: DeploymentFlowProps) {
                 onEdgesChange={onEdgesChange}
                 nodeTypes={nodeTypes}
                 fitView
-                draggable={false}
-                panOnDrag={false}
                 zoomOnScroll={false}
                 zoomOnPinch={false}
                 zoomOnDoubleClick={false}
@@ -243,11 +240,10 @@ function Content({ deployments, className }: DeploymentFlowProps) {
                 edgesFocusable={false}
                 selectNodesOnDrag={false}
                 defaultEdgeOptions={{ type: 'default' }}  // 기본 엣지 타입 설정
-                fitViewOptions={{ padding: 0.2 }}  // 여백 추가
+                fitViewOptions={{ padding: 0.3 }}  // 여백 추가
                 attributionPosition="bottom-left"
 
             >
-                <Controls />
                 <Background gap={12} size={1} />
                 {layouting && (
                     <Panel position="top-center">
