@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import ReactFlow, {
+    ReactFlowProvider,
     Background,
     Controls,
     type Node,
@@ -10,6 +11,7 @@ import ReactFlow, {
     Panel,
     MarkerType,
     Handle,
+    useReactFlow,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { type Deployment, DeploymentStatus } from '@repo/types/graphql';
@@ -95,10 +97,11 @@ type DeploymentFlowProps = {
     className?: string;
 };
 
-export function DeploymentFlow({ deployments, className }: DeploymentFlowProps) {
+function Content({ deployments, className }: DeploymentFlowProps) {
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const [layouting, setLayouting] = useState(false);
+    const reactFlowInstance = useReactFlow();
 
     // 노드 및 엣지 생성 함수
     const createNodesAndEdges = useCallback(() => {
@@ -157,10 +160,6 @@ export function DeploymentFlow({ deployments, className }: DeploymentFlowProps) 
                 ? depth * xSpacing + initialX
                 : initialX + depth * xSpacing;
 
-            // 같은 레벨의 노드들 간에 y 좌표를 분산
-            const nodesAtThisLevel = deployments.filter(
-                d => nodeDepths[d.id] === depth
-            ).length;
 
             const indexInLevel = deployments
                 .filter(d => nodeDepths[d.id] === depth)
@@ -206,18 +205,21 @@ export function DeploymentFlow({ deployments, className }: DeploymentFlowProps) 
                 })
         );
 
-        console.log('newNodes:', newNodes);
-        console.log('newEdges:', newEdges);
-
         setNodes(newNodes);
         setEdges(newEdges);
         setLayouting(false);
-    }, [deployments, setNodes, setEdges]);
+        setTimeout(() => reactFlowInstance.fitView(), 50);
+
+    }, [deployments, setNodes, setEdges, reactFlowInstance]);
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         setLayouting(true);
         createNodesAndEdges();
+        // 데이터가 완전히 업데이트된 후 뷰 조정
+        setTimeout(() => {
+            reactFlowInstance.fitView();
+        }, 50);
     }, [deployments, createNodesAndEdges]);
 
     return (
@@ -243,6 +245,7 @@ export function DeploymentFlow({ deployments, className }: DeploymentFlowProps) 
                 defaultEdgeOptions={{ type: 'default' }}  // 기본 엣지 타입 설정
                 fitViewOptions={{ padding: 0.2 }}  // 여백 추가
                 attributionPosition="bottom-left"
+
             >
                 <Controls />
                 <Background gap={12} size={1} />
@@ -256,4 +259,12 @@ export function DeploymentFlow({ deployments, className }: DeploymentFlowProps) 
             </ReactFlow>
         </div>
     );
+}
+
+export function DeploymentFlow(props: DeploymentFlowProps) {
+    return <Suspense>
+        <ReactFlowProvider >
+            <Content {...props} />
+        </ReactFlowProvider>
+    </Suspense>
 }

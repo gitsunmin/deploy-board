@@ -209,11 +209,11 @@ function Index() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Card className="shadow-lg border-t-4 border-indigo-500">
-          <CardHeader className="bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-gray-800 dark:to-gray-700">
+        <Card className="shadow-lg border-t-4 border-primary dark:border-primary">
+          <CardHeader className="bg-gradient-to-r from-indigo-50 to-secondary dark:from-gray-800 dark:to-gray-700 py-2">
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-2xl font-bold text-indigo-700 dark:text-indigo-400">
+                <CardTitle className="text-2xl font-bold text-primary dark:text-primary">
                   {data.document.title || "배포 현황판"}
                 </CardTitle>
                 <CardDescription className="mt-2">
@@ -226,7 +226,7 @@ function Index() {
                 </CardDescription>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+                <div className="h-2 w-2 bg-green-600 rounded-full animate-pulse transform-gpu duration-1000" />
                 <span className="text-xs text-gray-500">
                   실시간 업데이트 중
                 </span>
