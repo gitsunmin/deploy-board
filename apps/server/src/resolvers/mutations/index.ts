@@ -100,6 +100,9 @@ export const Mutation = ({ pubSub }: Options): Resolvers['Mutation'] => {
                     DATA_BASE.write();
                 });
                 console.log("Document updated:", DATA_BASE.data.document);
+                pubSub.publish('DOCUMENT_UPDATED', {
+                    documentUpdated: DATA_BASE.data.document
+                });
                 return DATA_BASE.data.document;
             } catch (error) {
                 console.error("Error updating document:", error);

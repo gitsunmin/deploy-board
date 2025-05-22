@@ -8,15 +8,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { gql, useQuery, useSubscription } from "@apollo/client";
-import {
-  DeploymentStatus,
-  type IndexDeploymentCreatedSubscription,
-  type IndexDeploymentCreatedSubscriptionVariables,
-  type IndexDeploymentDeletedSubscription,
-  type IndexDeploymentDeletedSubscriptionVariables,
-  type IndexDeploymentUpdatedSubscription,
-  type IndexDeploymentUpdatedSubscriptionVariables,
-  type IndexPageQuery,
+import type {
+  IndexDocumentUpdatedSubscription,
+  IndexDocumentUpdatedSubscriptionVariables,
+  IndexDeploymentCreatedSubscription,
+  IndexDeploymentCreatedSubscriptionVariables,
+  IndexDeploymentDeletedSubscription,
+  IndexDeploymentDeletedSubscriptionVariables,
+  IndexDeploymentUpdatedSubscription,
+  IndexDeploymentUpdatedSubscriptionVariables,
+  IndexPageQuery,
 } from "@repo/types/graphql";
 import { useLayoutEffect, useState, useRef, useEffect } from "react";
 import { LinkifyText } from "@/components/LinkifyText";
@@ -92,6 +93,15 @@ const DeletedSubscription = gql`
   }
 `;
 
+const UpdatedDocumentSubscription = gql`
+  subscription IndexDocumentUpdated {
+    documentUpdated {
+      title
+      description
+    }
+  }
+`;
+
 function Index() {
   const [deploymentList, setDeploymentList] = useState<
     IndexPageQuery["deployments"]
@@ -101,6 +111,10 @@ function Index() {
   } = useQuery<IndexPageQuery>(Query);
   const [updatedIds, setUpdatedIds] = useState<Set<string>>(new Set());
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [document, setDocument] = useState({
+    title: "",
+    description: "",
+  });
 
   // Clear animation states after delay
   useEffect(() => {
@@ -172,6 +186,7 @@ function Index() {
           )
         );
       }
+
     },
     shouldResubscribe: true,
     errorPolicy: "all",
@@ -196,11 +211,31 @@ function Index() {
     errorPolicy: "all",
   });
 
+  useSubscription<IndexDocumentUpdatedSubscription, IndexDocumentUpdatedSubscriptionVariables>(UpdatedDocumentSubscription, {
+    onData: ({ data: subscriptionData }) => {
+      const { data } = subscriptionData;
+      if (data && data?.documentUpdated !== null) {
+        const { documentUpdated } = data;
+        setDocument((prev) => ({
+          ...prev,
+          title: documentUpdated.title || prev.title,
+          description: documentUpdated.description || prev.description,
+        }));
+      }
+    }
+  })
+
   useLayoutEffect(() => {
     if (data.deployments.length > 0) {
       setDeploymentList(data.deployments);
     }
-  }, [data.deployments]);
+    if (data.document?.title && data.document.description) {
+      setDocument({
+        title: data.document.title || "",
+        description: data.document.description || "",
+      });
+    }
+  }, [data.deployments, data.document]);
 
   return (
     <div className="p-8 h-screen bg-gray-50 dark:bg-gray-900">
@@ -214,12 +249,12 @@ function Index() {
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="text-2xl font-bold text-primary dark:text-primary">
-                  {data.document.title || "배포 현황판"}
+                  {document.title || "배포 현황판"}
                 </CardTitle>
                 <CardDescription className="mt-2">
                   <LinkifyText
                     text={
-                      data.document.description ||
+                      document.description ||
                       "실시간 배포 상태를 확인하세요"
                     }
                   />

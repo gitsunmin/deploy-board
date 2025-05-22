@@ -35,5 +35,14 @@ export const Subscription = (globalOption: Options): Resolvers['Subscription'] =
                 return globalOption.pubSub.asyncIterableIterator(['DEPLOYMENT_DELETED'])
             }
         },
+        documentUpdated: {
+            subscribe: async (_parent, _args,) => {
+                globalOption.pubSub.subscribe('DOCUMENT_UPDATED', (payload) => {
+                    console.log("subscribe Document updated:", payload);
+                    return payload;
+                });
+                return globalOption.pubSub.asyncIterableIterator(['DOCUMENT_UPDATED'])
+            }
+        },
     }
 };

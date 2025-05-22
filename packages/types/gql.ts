@@ -26,6 +26,7 @@ type Documents = {
     "\n  subscription IndexDeploymentCreated {\n    deploymentCreated {\n      id\n      name\n      status\n      deployer\n      description\n      dependsOn\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.IndexDeploymentCreatedDocument,
     "\n  subscription IndexDeploymentUpdated {\n    deploymentUpdated {\n      id\n      name\n      status\n      deployer\n      description\n      dependsOn\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.IndexDeploymentUpdatedDocument,
     "\n  subscription IndexDeploymentDeleted {\n    deploymentDeleted {\n      id\n      name\n      status\n      deployer\n      description\n      dependsOn\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.IndexDeploymentDeletedDocument,
+    "\n  subscription IndexDocumentUpdated {\n    documentUpdated {\n      title\n      description\n    }\n  }\n": typeof types.IndexDocumentUpdatedDocument,
 };
 const documents: Documents = {
     "\n  mutation CreateDeployment($input: DeploymentInput!) {\n    createDeployment(input: $input) {\n      id\n      name\n      description\n      deployer\n    }\n  }\n": types.CreateDeploymentDocument,
@@ -40,6 +41,7 @@ const documents: Documents = {
     "\n  subscription IndexDeploymentCreated {\n    deploymentCreated {\n      id\n      name\n      status\n      deployer\n      description\n      dependsOn\n      createdAt\n      updatedAt\n    }\n  }\n": types.IndexDeploymentCreatedDocument,
     "\n  subscription IndexDeploymentUpdated {\n    deploymentUpdated {\n      id\n      name\n      status\n      deployer\n      description\n      dependsOn\n      createdAt\n      updatedAt\n    }\n  }\n": types.IndexDeploymentUpdatedDocument,
     "\n  subscription IndexDeploymentDeleted {\n    deploymentDeleted {\n      id\n      name\n      status\n      deployer\n      description\n      dependsOn\n      createdAt\n      updatedAt\n    }\n  }\n": types.IndexDeploymentDeletedDocument,
+    "\n  subscription IndexDocumentUpdated {\n    documentUpdated {\n      title\n      description\n    }\n  }\n": types.IndexDocumentUpdatedDocument,
 };
 
 /**
@@ -104,6 +106,10 @@ export function gql(source: "\n  subscription IndexDeploymentUpdated {\n    depl
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  subscription IndexDeploymentDeleted {\n    deploymentDeleted {\n      id\n      name\n      status\n      deployer\n      description\n      dependsOn\n      createdAt\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  subscription IndexDeploymentDeleted {\n    deploymentDeleted {\n      id\n      name\n      status\n      deployer\n      description\n      dependsOn\n      createdAt\n      updatedAt\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  subscription IndexDocumentUpdated {\n    documentUpdated {\n      title\n      description\n    }\n  }\n"): (typeof documents)["\n  subscription IndexDocumentUpdated {\n    documentUpdated {\n      title\n      description\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};
