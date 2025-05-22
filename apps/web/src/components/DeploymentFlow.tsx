@@ -209,7 +209,7 @@ function Content({ deployments, className }: DeploymentFlowProps) {
         setEdges(newEdges);
         setLayouting(false);
 
-    }, [deployments, setNodes, setEdges, reactFlowInstance]);
+    }, [deployments, setNodes, setEdges]);
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
@@ -222,8 +222,9 @@ function Content({ deployments, className }: DeploymentFlowProps) {
     }, [deployments, createNodesAndEdges]);
 
     return (
-        <div className={cn("w-full h-[500px] border rounded-lg bg-white", className)}>
+        <div className={cn("w-full h-[calc(100vh-300px)] border rounded-lg bg-white", className)}>
             <ReactFlow
+                className='w-full h-full'
                 nodes={nodes}
                 edges={edges}
                 onNodesChange={onNodesChange}
@@ -253,7 +254,7 @@ function Content({ deployments, className }: DeploymentFlowProps) {
                     </Panel>
                 )}
             </ReactFlow>
-        </div>
+        </div >
     );
 }
 

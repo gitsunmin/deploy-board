@@ -203,7 +203,7 @@ function Index() {
   }, [data.deployments]);
 
   return (
-    <div className="m-4 p-4 min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="p-8 h-screen bg-gray-50 dark:bg-gray-900">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
