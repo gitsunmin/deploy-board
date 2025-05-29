@@ -16,7 +16,10 @@ bun dev
 
 ## Todo-List
 - [x] Show the progress of deployment
-- [ ] Show the progress of deployment for each service
-- [ ] Change root page ui to Board Style
+- [x] Show the progress of deployment for each service
+- [x] Change root page ui to Board Style
 - [x] Environment variables
-- [ ] Implement UI to display deployment order
+- [x] Implement UI to display deployment order
+- [ ] Create Admin Account System
+    - [ ] Develop Admin Login Page
+    - [ ] Implement Admin Authentication
