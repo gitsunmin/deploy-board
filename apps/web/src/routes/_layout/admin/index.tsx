@@ -1,7 +1,7 @@
-import { AddDeploymentForm } from "@/components/AddDeploymentForm";
+import { AddDeploymentForm } from "@/components/forms/AddDeploymentForm";
 import { Separator } from "@/components/ui/separator";
-import { UpdateDeploymentForm } from "@/components/UpdateDeploymentForm";
-import { UpdateDocumentForm } from "@/components/UpdateDocumentForm";
+import { UpdateDeploymentForm } from "@/components/forms/UpdateDeploymentForm";
+import { UpdateDocumentForm } from "@/components/forms/UpdateDocumentForm";
 import { gql, useQuery, useSubscription } from "@apollo/client";
 import type {
   AdminDeploymentCreatedSubscription,

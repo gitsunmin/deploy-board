@@ -22,7 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Check, ChevronsUpDown, Trash2 } from "lucide-react";
+import { Check, ChevronsUpDown, FolderSymlink, Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -41,9 +41,10 @@ import {
   type Deployment,
 } from "@repo/types/graphql";
 import { gql, useMutation } from "@apollo/client";
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from './ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '../ui/command';
 import { cn } from '@/lib/utils';
+import { Link, useNavigate } from '@tanstack/react-router';
 
 const DELETE_DEPLOYMENT = gql`
   mutation DeleteDeployment($id: ID!) {
@@ -70,6 +71,8 @@ type Props = {
 };
 
 export const UpdateDeploymentForm = ({ data, deploymentList }: Props) => {
+  const navigate = useNavigate({ from: '/admin' })
+
   const [deleteDeploymentMutation] =
     useMutation<DeleteDeploymentMutation>(DELETE_DEPLOYMENT);
   const [updateDeploymentMutation] =
@@ -126,6 +129,12 @@ export const UpdateDeploymentForm = ({ data, deploymentList }: Props) => {
     name: deployment.name,
   }))
 
+  const handleLink = () => {
+    navigate({
+      to: `/admin/deployment/${data.id}`,
+    })
+  }
+
   return (
     <>
       <Card>
@@ -136,10 +145,16 @@ export const UpdateDeploymentForm = ({ data, deploymentList }: Props) => {
               onSubmit={form.handleSubmit(handleSubmit)}
               className="flex flex-col gap-2 relative"
             >
+              <div className='absolute -top-10 -left-11 bg-white'>
+                <Button type='button' variant={'link'} onClick={handleLink} className='-rotate-45 bg-white border-t-1 border-l-1 border-r-1 rounded-bl-none rounded-br-none border-solid border-boder cursor-pointer'>
+                  <FolderSymlink className='rotate-45' />
+                </Button>
+              </div>
               <div className="absolute -top-10 -right-11">
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button
+                      type='button'
                       variant={"ghost"}
                       className="rotate-45 bg-white border-t-1 border-l-1 border-r-1 rounded-bl-none rounded-br-none border-solid border-boder cursor-pointer"
                     >

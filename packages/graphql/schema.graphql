@@ -40,6 +40,8 @@ input DocumentInput {
 }
 
 type Query {
+  node(id: ID!): Node
+  
   document: Document!
   deployments: [Deployment!]!
 }

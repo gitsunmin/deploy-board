@@ -23,3 +23,4 @@ bun dev
 - [ ] Create Admin Account System
     - [ ] Develop Admin Login Page
     - [ ] Implement Admin Authentication
+- [x] Provide individual deployment complete button

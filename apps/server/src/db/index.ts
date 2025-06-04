@@ -17,24 +17,6 @@ const defaultData: Database = {
         description: 'Check the deployment status',
     },
     deployments: [
-        {
-            id: crypto.randomUUID(),
-            name: 'Deployment 1',
-            status: DeploymentStatus.Yet,
-            deployer: 'deployer1',
-            description: 'Check the deployment status',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-        },
-        {
-            id: crypto.randomUUID(),
-            name: 'Deployment 2',
-            status: DeploymentStatus.Yet,
-            deployer: 'deployer2',
-            description: 'Check the deployment status',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-        },
     ],
 };
 

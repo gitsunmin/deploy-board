@@ -92,6 +92,12 @@ export type Query = {
   readonly __typename?: 'Query';
   readonly deployments: ReadonlyArray<Deployment>;
   readonly document: Document;
+  readonly node?: Maybe<Node>;
+};
+
+
+export type QueryNodeArgs = {
+  id: Scalars['ID']['input'];
 };
 
 export type Subscription = {
@@ -239,6 +245,7 @@ export type NodeResolvers<ContextType = any, ParentType extends ResolversParentT
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   deployments?: Resolver<ReadonlyArray<ResolversTypes['Deployment']>, ParentType, ContextType>;
   document?: Resolver<ResolversTypes['Document'], ParentType, ContextType>;
+  node?: Resolver<Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<QueryNodeArgs, 'id'>>;
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {

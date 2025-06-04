@@ -15,6 +15,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as LayoutImport } from './routes/_layout'
 import { Route as LayoutAdminIndexImport } from './routes/_layout/admin/index'
+import { Route as LayoutAdminDeploymentDeployIdImport } from './routes/_layout/admin/deployment/$deployId'
 
 // Create Virtual Routes
 
@@ -38,6 +39,13 @@ const LayoutAdminIndexRoute = LayoutAdminIndexImport.update({
   path: '/admin/',
   getParentRoute: () => LayoutRoute,
 } as any)
+
+const LayoutAdminDeploymentDeployIdRoute =
+  LayoutAdminDeploymentDeployIdImport.update({
+    id: '/admin/deployment/$deployId',
+    path: '/admin/deployment/$deployId',
+    getParentRoute: () => LayoutRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -64,6 +72,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutAdminIndexImport
       parentRoute: typeof LayoutImport
     }
+    '/_layout/admin/deployment/$deployId': {
+      id: '/_layout/admin/deployment/$deployId'
+      path: '/admin/deployment/$deployId'
+      fullPath: '/admin/deployment/$deployId'
+      preLoaderRoute: typeof LayoutAdminDeploymentDeployIdImport
+      parentRoute: typeof LayoutImport
+    }
   }
 }
 
@@ -71,10 +86,12 @@ declare module '@tanstack/react-router' {
 
 interface LayoutRouteChildren {
   LayoutAdminIndexRoute: typeof LayoutAdminIndexRoute
+  LayoutAdminDeploymentDeployIdRoute: typeof LayoutAdminDeploymentDeployIdRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutAdminIndexRoute: LayoutAdminIndexRoute,
+  LayoutAdminDeploymentDeployIdRoute: LayoutAdminDeploymentDeployIdRoute,
 }
 
 const LayoutRouteWithChildren =
@@ -84,12 +101,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '': typeof LayoutRouteWithChildren
   '/admin': typeof LayoutAdminIndexRoute
+  '/admin/deployment/$deployId': typeof LayoutAdminDeploymentDeployIdRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '': typeof LayoutRouteWithChildren
   '/admin': typeof LayoutAdminIndexRoute
+  '/admin/deployment/$deployId': typeof LayoutAdminDeploymentDeployIdRoute
 }
 
 export interface FileRoutesById {
@@ -97,14 +116,20 @@ export interface FileRoutesById {
   '/': typeof IndexLazyRoute
   '/_layout': typeof LayoutRouteWithChildren
   '/_layout/admin/': typeof LayoutAdminIndexRoute
+  '/_layout/admin/deployment/$deployId': typeof LayoutAdminDeploymentDeployIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/admin'
+  fullPaths: '/' | '' | '/admin' | '/admin/deployment/$deployId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/admin'
-  id: '__root__' | '/' | '/_layout' | '/_layout/admin/'
+  to: '/' | '' | '/admin' | '/admin/deployment/$deployId'
+  id:
+    | '__root__'
+    | '/'
+    | '/_layout'
+    | '/_layout/admin/'
+    | '/_layout/admin/deployment/$deployId'
   fileRoutesById: FileRoutesById
 }
 
@@ -138,11 +163,16 @@ export const routeTree = rootRoute
     "/_layout": {
       "filePath": "_layout.tsx",
       "children": [
-        "/_layout/admin/"
+        "/_layout/admin/",
+        "/_layout/admin/deployment/$deployId"
       ]
     },
     "/_layout/admin/": {
       "filePath": "_layout/admin/index.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/admin/deployment/$deployId": {
+      "filePath": "_layout/admin/deployment/$deployId.tsx",
       "parent": "/_layout"
     }
   }

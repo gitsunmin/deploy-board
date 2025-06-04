@@ -22,10 +22,10 @@ import {
   DeploymentStatus,
   type CreateDeploymentMutation,
 } from "@repo/types/graphql";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import type { Deployment } from '@repo/types/schema';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from './ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '../ui/command';
 
 const CREATE_DEPLOYMENT = gql`
   mutation CreateDeployment($input: DeploymentInput!) {

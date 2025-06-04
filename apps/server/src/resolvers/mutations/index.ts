@@ -11,7 +11,7 @@ export const Mutation = ({ pubSub }: Options): Resolvers['Mutation'] => {
         createDeployment: async (_, { input }) => {
             const { name, description, deployer, status, dependsOn } = input;
             const newDeployment = {
-                id: crypto.randomUUID(),
+                id: `deployment_${crypto.randomUUID()}`,
                 name,
                 description,
                 deployer,
@@ -58,8 +58,6 @@ export const Mutation = ({ pubSub }: Options): Resolvers['Mutation'] => {
         },
         updateDeployment: async (_, { id, input }) => {
             const { name, description, deployer, status, dependsOn } = input;
-
-            console.log('dependsOn:', dependsOn);
             try {
                 let updateDeployment = null;
                 await DATA_BASE.update(({ deployments }) => {
