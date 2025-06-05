@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const System = {
-  PORT: 3000,
+  PORT: process.env.SERVER_PORT ? parseInt(process.env.SERVER_PORT, 10) : 3000,
   SCHEMA_PATH: join(__dirname, '../../../../packages/graphql/schema.graphql'),
 };
 

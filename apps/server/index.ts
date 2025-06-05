@@ -22,18 +22,19 @@ FastifyApp.register(Mercurius, {
   schema: FastifySchema,
   resolvers,
   graphiql: true,
-  subscription: true
+  subscription: true,
+
 })
 
-FastifyApp.get('/', async function (req, reply) {
-  const query = '{ document { title } }'
-  return reply.graphql(query)
+FastifyApp.get('/health', async function () {
+  return { status: 'ok' }
 })
 
-FastifyApp.listen({ port: 4000 })
+FastifyApp.listen({ port: Constants.System.PORT }, (_, args2) => {
+  console.log('Starting Server on ', args2);
+})
 
 
 mercuriusCodegen(FastifyApp, {
-  // Commonly relative to your root package.json
   targetPath: './../../packages/graphql/generated.ts'
 }).catch(console.error)
