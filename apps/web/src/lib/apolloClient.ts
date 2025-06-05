@@ -9,7 +9,7 @@ const httpLink = new HttpLink({
 });
 
 const wsLink = new GraphQLWsLink(createClient({
-    url: `${ENV.WS_SERVER_URI}:${ENV.WS_SERVER_PORT}/subscriptions`,
+    url: `${ENV.WS_SERVER_URI}:${ENV.WS_SERVER_PORT}/graphql`,
 }));
 
 // 분할 링크

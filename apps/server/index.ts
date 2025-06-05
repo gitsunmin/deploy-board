@@ -1,92 +1,39 @@
-import { resolvers } from '@/resolvers';
 import { Constants } from '@/constants';
-import { ApolloServer } from '@apollo/server';
-import { WebSocketServer } from 'ws';
-import { makeExecutableSchema } from '@graphql-tools/schema';
-import { createServer } from 'node:http';
-import express from 'express';
-import { useServer } from 'graphql-ws/use/ws';
-import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-import cors from 'cors';
-import { expressMiddleware } from '@apollo/server/express4';
-import { ENV } from '@repo/env';
+import { resolvers } from '@/resolvers';
+import Fastify from 'fastify';
+import Mercurius from 'mercurius';
+import mercuriusCodegen from 'mercurius-codegen'
+import cors from '@fastify/cors';
 
-const typeDefs = await Bun.file(Constants.System.SCHEMA_PATH).text();
-
-const schema = makeExecutableSchema({
-  typeDefs,
-  resolvers,
+const FastifyApp = Fastify({
+  logger: true,
 })
 
-const app = express();
-const httpServer = createServer(app);
+const FastifySchema = await Bun.file(Constants.System.SCHEMA_PATH).text();
 
-const wsServer = new WebSocketServer({
-  server: httpServer,
-  path: '/subscriptions',
-  skipUTF8Validation: true,
-});
+await FastifyApp.register(cors, {
+  origin: true, // For development, allow all origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization'],
+})
 
-const serverCleanup = useServer({
-  schema,
-  context: (ctx) => {
-    // 컨텍스트 명시적 설정
-    return { ctx };
-  },
-  onConnect: () => {
-    console.log('Client connected to WebSocket');
-    return true;
-  },
-  onDisconnect: () => {
-    console.log('Client disconnected from WebSocket');
-  },
-}, wsServer);
+FastifyApp.register(Mercurius, {
+  schema: FastifySchema,
+  resolvers,
+  graphiql: true,
+  subscription: true
+})
 
-const server = new ApolloServer({
-  schema,
-  plugins: [
-    ApolloServerPluginDrainHttpServer({ httpServer }),
-    {
-      async serverWillStart() {
-        console.log('serverWillStart server...');
-        return {
-          async drainServer() {
-            await serverCleanup.dispose();
-          },
+FastifyApp.get('/', async function (req, reply) {
+  const query = '{ document { title } }'
+  return reply.graphql(query)
+})
 
-        };
-      },
-    },
-  ],
-  logger: {
-    debug(message) {
-      console.log(message);
-    },
-    info(message) {
-      console.log(message);
-    },
-    warn(message) {
-      console.warn(message);
-    },
-    error(message) {
-      console.error(message);
-    },
-  }
-});
+FastifyApp.listen({ port: 4000 })
 
 
-await server.start();
-
-app.use(
-  '/graphql',
-  cors<cors.CorsRequest>({
-    origin: '*',
-  }),
-  express.json(),
-  expressMiddleware(server),
-);
-
-// Now that our HTTP server is fully set up, we can listen to it.
-httpServer.listen(ENV.SERVER_PORT, () => {
-  console.log(`Server is now running on ${ENV.SERVER_URI}:${ENV.SERVER_PORT}/graphql`);
-});
+mercuriusCodegen(FastifyApp, {
+  // Commonly relative to your root package.json
+  targetPath: './../../packages/graphql/generated.ts'
+}).catch(console.error)

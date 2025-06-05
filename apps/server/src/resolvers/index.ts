@@ -1,15 +1,16 @@
+import { Query } from '@/resolvers/query';
+import type { IResolvers } from 'mercurius';
+import { match, P } from 'ts-pattern';
+import { Subscription } from '@/resolvers/subscription';
+import { Mutation } from '@/resolvers/mutation';
 
-import type { Resolvers } from '@repo/types/schema';
-import { Mutation } from '@/resolvers/mutations';
-import { Node, Query } from '@/resolvers/queries';
-import { Subscription } from '@/resolvers/subscriptions';
-import { PubSub } from 'graphql-subscriptions';
-
-const pubSub = new PubSub();
-
-export const resolvers: Resolvers = {
-    Node,
+export const resolvers: IResolvers = {
     Query,
-    Mutation: Mutation({ pubSub }),
-    Subscription: Subscription({ pubSub }),
-}
+    Mutation,
+    Subscription,
+    Node: {
+        resolveType: ({ id }) => match(id)
+            .with(P.string.startsWith('deployment_'), () => 'Deployment' as const)
+            .otherwise(() => null),
+    }
+};

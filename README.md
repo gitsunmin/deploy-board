@@ -24,3 +24,4 @@ bun watch:all
     - [ ] Develop Admin Login Page
     - [ ] Implement Admin Authentication
 - [x] Provide individual deployment complete button
+- [ ] Apply Relay
