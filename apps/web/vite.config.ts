@@ -4,16 +4,15 @@ import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 import path from 'node:path';
 import tailwindcss from '@tailwindcss/vite';
 import { copyFileSync } from 'node:fs';
-import dotenv from 'dotenv';
-import { ENV } from '../../packages/env';
+import { ENV } from './../../packages/env'
 
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+const url = new URL(ENV.CLIENT_URL);
 
 export default defineConfig(() => {
   return {
     server: {
-      port: ENV.CLIENT_PORT,
-      allowedHosts: [ENV.CLIENT_URI],
+      port: url.port ? parseInt(url.port, 10) : 3000,
+      allowedHosts: [url.origin || 'localhost'],
     },
     plugins: [
       TanStackRouterVite({ target: 'react', autoCodeSplitting: true }),

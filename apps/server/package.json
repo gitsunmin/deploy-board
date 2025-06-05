@@ -21,6 +21,7 @@
     "graphql": "^16.11.0",
     "lowdb": "^7.0.1",
     "mercurius": "^16.1.0",
-    "mercurius-codegen": "^6.0.1"
+    "mercurius-codegen": "^6.0.1",
+    "mercurius-logging": "^2.0.0"
   }
 }

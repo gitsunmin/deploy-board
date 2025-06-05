@@ -4,12 +4,14 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { ENV } from '@repo/env';
 
+const serverUrl = new URL(ENV.SERVER_URL);
+
 const httpLink = new HttpLink({
-    uri: `${ENV.SERVER_URI}:${ENV.SERVER_PORT}/graphql`
+    uri: `${serverUrl.protocol}//${serverUrl.host}/graphql`
 });
 
 const wsLink = new GraphQLWsLink(createClient({
-    url: `${ENV.WS_SERVER_URI}:${ENV.WS_SERVER_PORT}/graphql`,
+    url: `${serverUrl.protocol.replace('http', 'ws')}//${serverUrl.host}/graphql`,
 }));
 
 // 분할 링크

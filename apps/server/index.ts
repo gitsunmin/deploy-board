@@ -4,6 +4,14 @@ import Fastify from 'fastify';
 import Mercurius from 'mercurius';
 import mercuriusCodegen from 'mercurius-codegen'
 import cors from '@fastify/cors';
+import MercuriusLogging from 'mercurius-logging';
+import { ENV } from '@repo/env'
+import path from 'node:path';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+
+const serverUri = new URL(ENV.SERVER_URL);
 
 const FastifyApp = Fastify({
   logger: true,
@@ -26,12 +34,20 @@ FastifyApp.register(Mercurius, {
 
 })
 
+FastifyApp.register(MercuriusLogging, {
+  logLevel: 'info',
+  logBody: true,
+  logVariables: true,
+  logRequest: true,
+  logMessage: (context) => `GraphQL Request: ${context.operationId} ${context.__currentQuery}`,
+})
+
 FastifyApp.get('/health', async function () {
   return { status: 'ok' }
 })
 
-FastifyApp.listen({ port: Constants.System.PORT }, (_, args2) => {
-  console.log('Starting Server on ', args2);
+FastifyApp.listen({ port: Number(serverUri.port) }, (_, args2) => {
+  console.log('Starting Server on ', serverUri.origin);
 })
 
 

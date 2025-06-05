@@ -1,5 +1,9 @@
 {
   "$schema": "https://turborepo.com/schema.json",
+  "globalEnv": [
+    "SERVER_URL",
+    "CLIENT_URL"
+  ],
   "globalDependencies": [
     ".env"
   ],
@@ -28,6 +32,10 @@
       "persistent": true
     },
     "watch:all": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env"
+      ],
       "with": [
         "gen:graphql-type",
         "dev"
