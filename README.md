@@ -11,7 +11,7 @@ Project to show the progress of deployment when multiple services are deployed s
 bun install
 
 # Start the server
-bun dev
+bun watch:all
 ```
 
 ## Todo-List
