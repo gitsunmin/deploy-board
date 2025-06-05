@@ -1,4 +1,3 @@
-// import { type Deployment } from '@repo/types/schema';
 import { JSONFilePreset } from 'lowdb/node';
 import type { Low } from 'lowdb';
 import type { Deployment, Document } from '@repo/graphql/generated';
