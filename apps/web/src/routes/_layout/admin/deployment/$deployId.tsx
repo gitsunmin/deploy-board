@@ -1,4 +1,4 @@
-import { createFileRoute, useLoaderData } from '@tanstack/react-router'
+import { createFileRoute, Link, useLoaderData } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -74,6 +74,11 @@ function RouteComponent() {
     );
     const [showConfetti, setShowConfetti] = useState(false);
 
+    // Add these new state variables
+    const [isPressed, setIsPressed] = useState(false);
+    const [pressProgress, setPressProgress] = useState(0);
+    const [pressTimer, setPressTimer] = useState<NodeJS.Timeout | null>(null);
+
     const handleDeployComplete = (input: DeploymentCompleteMutationVariables['input']) => () => {
         updateDeployment({
             variables: {
@@ -82,6 +87,56 @@ function RouteComponent() {
             },
         })
     }
+
+    // Press and hold handlers
+    const handlePressStart = (node: NonNullable<DeploymentQuery['node']>) => () => {
+        setIsPressed(true);
+        setPressProgress(0);
+
+        // Clear any existing timer
+        if (pressTimer) clearInterval(pressTimer);
+
+        // Set up progress timer (3 seconds total)
+        const timer = setInterval(() => {
+            setPressProgress(prev => {
+                const newProgress = prev + (100 / 30); // 100% in 3 seconds (30 * 100ms)
+
+                if (newProgress >= 100) {
+                    clearInterval(timer);
+                    handleDeployComplete({
+                        name: node.name,
+                        deployer: node.deployer,
+                        status: DeploymentStatus.Success,
+                        description: node.description ?? '',
+                        dependsOn: node.dependsOn ?? [],
+                    })();
+                    return 100;
+                }
+                return newProgress;
+            });
+        }, 100);
+
+        setPressTimer(timer);
+    };
+
+    const handlePressEnd = () => {
+        if (pressProgress < 100) { // Only cancel if not complete
+            setIsPressed(false);
+            setPressProgress(0);
+
+            if (pressTimer) {
+                clearInterval(pressTimer);
+                setPressTimer(null);
+            }
+        }
+    };
+
+    // Cleanup on unmount
+    useEffect(() => {
+        return () => {
+            if (pressTimer) clearInterval(pressTimer);
+        };
+    }, [pressTimer]);
 
     useEffect(() => {
         setIsDeployed(match(data)
@@ -100,7 +155,7 @@ function RouteComponent() {
                         <CardHeader>
                             <CardTitle className="text-2xl font-bold">{`"${node.name}"`}</CardTitle>
                             <CardDescription>
-                                배포 완료를 위해 아래 버튼을 클릭하세요
+                                배포 완료를 위해 아래 버튼을 3초간 눌러주세요.
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="flex flex-col items-center">
@@ -113,19 +168,39 @@ function RouteComponent() {
                                         exit={{ scale: 0.9, opacity: 0 }}
                                         className="w-full flex justify-center"
                                     >
-                                        <Button
-                                            size="lg"
-                                            className="mt-4 text-xl py-8 px-12 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 active:translate-y-0 active:shadow-md w-full max-w-md font-bold"
-                                            onClick={handleDeployComplete({
-                                                name: node.name,
-                                                deployer: node.deployer,
-                                                status: DeploymentStatus.Success,
-                                                description: node.description ?? '',
-                                                dependsOn: node.dependsOn ?? [],
-                                            })}
-                                        >
-                                            배포 완료
-                                        </Button>
+                                        <div className="relative w-full max-w-md">
+                                            <Button
+                                                size="lg"
+                                                className={cn(
+                                                    "mt-4 text-xl py-8 px-12 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 shadow-lg transition-all duration-300 w-full max-w-md font-bold relative overflow-hidden",
+                                                    isPressed ? "transform scale-[0.98]" : ""
+                                                )}
+                                                onMouseDown={handlePressStart(node)}
+                                                onMouseUp={handlePressEnd}
+                                                onMouseLeave={handlePressEnd}
+                                                onTouchStart={handlePressStart(node)}
+                                                onTouchEnd={handlePressEnd}
+                                                type="button"
+                                            >
+                                                {isPressed ? <motion.div
+                                                    className="font-medium text-white"
+                                                    initial={{ opacity: 0 }}
+                                                    animate={{ opacity: 1 }}
+                                                >
+                                                    {pressProgress < 100 ? "계속 누르세요..." : "완료!"}
+                                                </motion.div> : "배포 완료"}
+                                                {/* 배포 완료 */}
+                                                {isPressed && (
+                                                    <motion.div
+                                                        className="absolute bottom-0 left-0 h-2 bg-white bg-opacity-70"
+                                                        style={{ width: `${pressProgress}%` }}
+                                                        initial={{ width: "0%" }}
+                                                        animate={{ width: `${pressProgress}%` }}
+                                                    />
+                                                )}
+                                            </Button>
+
+                                        </div>
                                     </motion.div>
                                 ) : (
                                     <motion.div
@@ -160,6 +235,11 @@ function RouteComponent() {
                                     </motion.div>
                                 )}
                             </AnimatePresence>
+                            <Link to='' href={`/admin`} className={cn(`text-sm text-gray-500 hover:text-gray-700 transition-colors duration-200 hover:underline pt-8`, {
+                                'hidden': !isDeployed
+                            })}>
+                                잘못 눌렀습니다..
+                            </Link>
                         </CardContent>
                     </Card>
 
