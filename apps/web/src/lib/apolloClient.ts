@@ -4,7 +4,7 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { ENV } from '@repo/env';
 
-const serverUrl = new URL(ENV.SERVER_URL);
+const serverUrl = new URL(process.env.NODE_ENV === 'development' ? `http://localhost:${ENV.SERVER_PORT}` : ENV.EXTERNAL_SERVER_URL);
 
 const httpLink = new HttpLink({
     uri: `${serverUrl.protocol}//${serverUrl.host}/graphql`

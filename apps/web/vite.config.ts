@@ -5,15 +5,24 @@ import path from 'node:path';
 import tailwindcss from '@tailwindcss/vite';
 import { copyFileSync } from 'node:fs';
 import { ENV } from './../../packages/env'
+import { match } from 'ts-pattern';
 
-const url = new URL(ENV.CLIENT_URL);
 
-export default defineConfig(() => {
-  return {
-    server: {
-      port: url.port ? parseInt(url.port, 10) : 3000,
+export default defineConfig(({ mode }) => {
+  const url = new URL(ENV.EXTERNAL_SERVER_URL);
+
+  const server = match(mode)
+    .with('production', () => ({
+      port: ENV.CLIENT_PORT,
       allowedHosts: [url.origin || 'localhost'],
-    },
+    }))
+    .otherwise(() => ({
+      port: ENV.CLIENT_PORT,
+      allowedHosts: ['localhost'],
+    }));
+
+  return {
+    server,
     plugins: [
       TanStackRouterVite({ target: 'react', autoCodeSplitting: true }),
       tailwindcss(),

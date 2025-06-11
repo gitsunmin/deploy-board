@@ -8,17 +8,9 @@ import MercuriusLogging from 'mercurius-logging';
 import { ENV } from '@repo/env'
 import path from 'node:path';
 import dotenv from 'dotenv';
-import { match, P } from 'ts-pattern';
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
-const serverUri = new URL(ENV.SERVER_URL);
-
-const port = match(serverUri)
-  .with({ port: P.string.minLength(1) }, (uri) => Number(uri.port))
-  .with({ protocol: 'http:' }, () => 3000)
-  .with({ protocol: 'https:' }, () => 443)
-  .otherwise(() => 8000);
 
 const FastifyApp = Fastify({
   logger: true,
@@ -36,8 +28,11 @@ await FastifyApp.register(cors, {
 FastifyApp.register(Mercurius, {
   schema: FastifySchema,
   resolvers,
-  graphiql: true,
   subscription: true,
+  graphiql: {
+    enabled: true,
+    plugins: [],
+  },
 
 })
 
@@ -54,7 +49,7 @@ FastifyApp.get('/health', async function () {
 })
 
 FastifyApp.listen({ port: 8000 }, (_, args2) => {
-  console.log('Starting Server on ', serverUri.origin, `:${port}`);
+  console.log('Starting Server on ', `:${ENV.SERVER_PORT}`);
 })
 
 
