@@ -48,8 +48,17 @@ FastifyApp.get('/health', async function () {
   return { status: 'ok' }
 })
 
-FastifyApp.listen({ port: 8000 }, (_, args2) => {
-  console.log('Starting Server on ', `:${ENV.SERVER_PORT}`);
+// 외부에서 접근 가능하도록 host를 0.0.0.0으로 설정
+FastifyApp.listen({ 
+  port: ENV.SERVER_PORT, 
+  host: '0.0.0.0' 
+}, (err, address) => {
+  if (err) {
+    FastifyApp.log.error(err);
+    process.exit(1);
+  }
+  console.log(`Server is running at ${address}`);
+  console.log(`GraphiQL available at ${address}/graphiql`);
 })
 
 
