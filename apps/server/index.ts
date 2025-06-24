@@ -8,19 +8,12 @@ import MercuriusLogging from 'mercurius-logging';
 import { ENV } from '@repo/env'
 import path from 'node:path';
 import dotenv from 'dotenv';
-import fs from 'node:fs';
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
-// HTTPS 설정을 위한 SSL 인증서 읽기
-const httpsOptions = {
-  key: fs.readFileSync(path.join(__dirname, 'ssl', 'localhost+3-key.pem')),
-  cert: fs.readFileSync(path.join(__dirname, 'ssl', 'localhost+3.pem'))
-};
 
 const FastifyApp = Fastify({
   logger: true,
-  https: httpsOptions
 })
 
 const FastifySchema = await Bun.file(Constants.System.SCHEMA_PATH).text();
