@@ -22,21 +22,30 @@ await FastifyApp.register(cors, {
   origin: true, // For development, allow all origins
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With'],
+  preflightContinue: false,
+  optionsSuccessStatus: 200,
 })
 
-FastifyApp.register(Mercurius, {
+await FastifyApp.register(Mercurius, {
   schema: FastifySchema,
   resolvers,
-  subscription: true,
+  subscription: {
+    context: (connection, request) => {
+      return {};
+    },
+    verifyClient: (info, next) => {
+      // Allow all WebSocket connections in development
+      next(true);
+    }
+  },
   graphiql: {
     enabled: true,
     plugins: [],
   },
-
 })
 
-FastifyApp.register(MercuriusLogging, {
+await FastifyApp.register(MercuriusLogging, {
   logLevel: 'info',
   logBody: true,
   logVariables: true,
@@ -44,8 +53,30 @@ FastifyApp.register(MercuriusLogging, {
   logMessage: (context) => `GraphQL Request: ${context.operationId} ${context.__currentQuery}`,
 })
 
+// Add WebSocket CORS headers
+FastifyApp.addHook('onRequest', async (request, reply) => {
+  if (request.headers.upgrade === 'websocket') {
+    reply.header('Access-Control-Allow-Origin', '*');
+    reply.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    reply.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
+    reply.header('Access-Control-Allow-Credentials', 'true');
+  }
+})
+
 FastifyApp.get('/health', async function () {
   return { status: 'ok' }
+})
+
+// Explicit OPTIONS handler for GraphQL endpoint
+FastifyApp.options('/graphql', async (request, reply) => {
+  reply
+    .header('Access-Control-Allow-Origin', '*')
+    .header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+    .header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With')
+    .header('Access-Control-Allow-Credentials', 'true')
+    .header('Access-Control-Max-Age', '86400')
+    .code(200)
+    .send()
 })
 
 // 외부에서 접근 가능하도록 host를 0.0.0.0으로 설정
